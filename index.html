@@ -1,183 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yifan Xiao — Director of Photography</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <title>Yifan Xiao</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f8f7f4;
-      --text: #111110;
-      --muted: #888884;
-      --border: #e0deda;
+      --bg:      #f9f8f5;
+      --text:    #2c2b28;
+      --soft:    #7a7870;
+      --border:  #e5e3de;
+      --hover:   #f2f0ec;
+      --sidebar: 220px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
 
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Jost', sans-serif;
       font-weight: 300;
       background: var(--bg);
       color: var(--text);
+      display: flex;
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      width: var(--sidebar);
       min-height: 100vh;
+      border-right: 1px solid var(--border);
+      padding: 48px 32px;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
       display: flex;
       flex-direction: column;
-    }
-
-    /* ── NAV ── */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 36px 60px;
-      border-bottom: 1px solid var(--border);
-      position: fixed;
-      top: 0; left: 0; right: 0;
+      z-index: 100;
       background: var(--bg);
-      z-index: 10;
     }
 
-    .logo {
-      font-size: 15px;
+    .site-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
       font-weight: 400;
       letter-spacing: 0.04em;
+      margin-bottom: 6px;
       cursor: pointer;
-      text-decoration: none;
       color: var(--text);
     }
 
-    nav { display: flex; gap: 36px; }
+    .site-role {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 56px;
+    }
 
-    nav button {
-      background: none;
-      border: none;
-      font-family: 'Outfit', sans-serif;
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      display: block;
       font-size: 13px;
       font-weight: 300;
-      letter-spacing: 0.06em;
-      color: var(--muted);
+      letter-spacing: 0.05em;
+      color: var(--soft);
       cursor: pointer;
-      padding: 0;
+      padding: 7px 0;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      font-family: 'Jost', sans-serif;
+      text-align: left;
+      width: 100%;
+    }
+
+    .nav-link:hover,
+    .nav-link.active { color: var(--text); }
+
+    /* Films dropdown */
+    .films-dropdown {
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      padding: 4px 0 4px 12px;
+      border-left: 1px solid var(--border);
+      margin-left: 2px;
+    }
+
+    .nav-item:hover .films-dropdown,
+    .nav-item.open .films-dropdown {
+      display: flex;
+    }
+
+    .film-nav-link {
+      font-size: 11.5px;
+      font-weight: 300;
+      color: var(--soft);
+      cursor: pointer;
+      padding: 4px 0;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      font-family: 'Jost', sans-serif;
+      text-align: left;
+    }
+
+    .film-nav-link:hover { color: var(--text); }
+
+    .nav-social {
+      font-size: 11px;
+      color: var(--soft);
+      letter-spacing: 0.05em;
+      text-decoration: none;
       transition: color 0.2s;
     }
 
-    nav button:hover,
-    nav button.active { color: var(--text); }
+    .nav-social:hover { color: var(--text); }
 
-    /* ── PAGES ── */
-    .page { display: none; flex: 1; }
+    /* ── MAIN ── */
+    main {
+      margin-left: var(--sidebar);
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    .page { display: none; min-height: 100vh; }
     .page.active { display: flex; flex-direction: column; }
 
     /* ── HOME ── */
     #page-home {
+      align-items: center;
       justify-content: center;
-      padding: 0 60px;
-      min-height: 100vh;
+      position: relative;
     }
 
-    .home-inner {
+    .home-photo {
+      position: absolute;
+      inset: 0;
+      background: #e8e6e0;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding-top: 88px;
     }
 
-    .home-name {
-      font-size: clamp(52px, 9vw, 120px);
-      font-weight: 200;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      margin-bottom: 20px;
-    }
-
-    .home-title {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 52px;
-    }
-
-    .home-cta {
-      display: inline-block;
-      font-size: 13px;
-      font-weight: 300;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      border-bottom: 1px solid var(--text);
-      padding-bottom: 2px;
-      cursor: pointer;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      font-family: 'Outfit', sans-serif;
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .home-cta:hover { color: var(--muted); border-color: var(--muted); }
-
-    /* ── INNER PAGES ── */
-    .inner {
-      padding: 152px 60px 80px;
-      flex: 1;
-    }
-
-    .page-label {
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 56px;
-    }
-
-    /* ── BIO ── */
-    .bio-grid {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    .bio-facts { display: flex; flex-direction: column; }
-
-    .bio-fact {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .bio-fact:first-child { border-top: 1px solid var(--border); }
-
-    .fact-label {
+    .photo-placeholder {
       font-size: 11px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #b0ae a8;
+      color: #b5b3ac;
     }
 
-    .fact-value { font-size: 14px; }
-
-    .bio-body {
-      font-size: 16px;
-      line-height: 1.85;
-      color: #333330;
+    .home-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    .bio-body p + p { margin-top: 1.4em; }
+    .home-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .home-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 6vw, 80px);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+
+    .home-title {
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    /* ── FILMS LIST PAGE ── */
+    #page-films {
+      padding: 60px 64px;
+    }
+
+    .films-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+    }
+
+    .film-thumb {
+      position: relative;
+      aspect-ratio: 16/10;
+      background: #e0ded9;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .film-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.4s;
+    }
+
+    .film-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(44,43,40,0);
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      transition: background 0.3s;
+    }
+
+    .film-thumb:hover .film-thumb-overlay {
+      background: rgba(44,43,40,0.45);
+    }
+
+    .film-thumb-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: white;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .film-thumb:hover .film-thumb-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── INDIVIDUAL FILM PAGE ── */
+    .film-page {
+      padding: 60px 64px;
+    }
+
+    .film-page-back {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--soft);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'Jost', sans-serif;
+      padding: 0;
+      margin-bottom: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .film-page-back:hover { color: var(--text); }
+
+    .film-page-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #e0ded9;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .film-page-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .film-page-image-placeholder {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #b5b3ac;
+    }
+
+    .film-page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      margin-bottom: 16px;
+    }
+
+    .film-page-meta {
+      font-size: 12px;
+      color: var(--soft);
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+
+    .film-page-desc {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--soft);
+      max-width: 560px;
+    }
 
     /* ── REEL ── */
+    #page-reel {
+      align-items: stretch;
+      justify-content: center;
+    }
+
     .reel-wrap {
       position: relative;
       width: 100%;
       padding-bottom: 56.25%;
-      background: #0a0a0a;
+      background: #1a1916;
+      flex: 1;
     }
 
     .reel-wrap iframe {
@@ -198,208 +355,256 @@
     }
 
     .play-circle {
-      width: 64px;
-      height: 64px;
-      border: 1px solid rgba(255,255,255,0.35);
+      width: 60px;
+      height: 60px;
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.25s, background 0.25s;
     }
 
     .play-overlay:hover .play-circle {
-      border-color: rgba(255,255,255,0.8);
-      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.05);
     }
 
-    .reel-note {
-      margin-top: 16px;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.06em;
+    /* ── ABOUT ── */
+    #page-about {
+      flex-direction: row;
     }
 
-    /* ── FILMS ── */
-    .films-list { display: flex; flex-direction: column; }
-
-    .film-row {
-      display: grid;
-      grid-template-columns: 72px 1fr 160px 140px;
-      gap: 24px;
-      align-items: baseline;
-      padding: 26px 0;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-    }
-
-    .films-list .film-row:first-child { border-top: 1px solid var(--border); }
-
-    .film-row-year {
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    .film-row-title { font-size: 15px; }
-
-    .film-row-role {
-      font-size: 12px;
-      color: var(--muted);
-      text-align: right;
-    }
-
-    .film-row-format {
-      font-size: 12px;
-      color: var(--muted);
-      text-align: right;
-      letter-spacing: 0.04em;
-    }
-
-    /* ── CONTACT ── */
-    .contact-line {
-      font-size: clamp(26px, 3.5vw, 48px);
-      font-weight: 200;
-      line-height: 1.3;
-      letter-spacing: -0.01em;
-      margin-bottom: 64px;
-    }
-
-    .contact-items {
-      display: flex;
-      flex-direction: column;
-      max-width: 500px;
-    }
-
-    .contact-item {
+    .about-photo {
+      width: 45%;
+      background: #e0ded9;
+      position: relative;
+      min-height: 100vh;
       display: flex;
       align-items: center;
-      gap: 24px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-
-    .contact-item:first-child { border-top: 1px solid var(--border); }
-    .contact-item:hover { color: var(--muted); }
-
-    .contact-item-label {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      width: 80px;
+      justify-content: center;
+      overflow: hidden;
       flex-shrink: 0;
     }
 
-    .contact-item-value { flex: 1; }
-
-    .contact-arrow { font-size: 15px; margin-left: auto; transition: transform 0.2s; }
-    .contact-item:hover .contact-arrow { transform: translate(3px, -3px); }
-
-    /* ── FOOTER ── */
-    footer {
-      padding: 20px 60px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
     }
+
+    .about-content {
+      flex: 1;
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .about-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 36px;
+    }
+
+    .about-bio {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      max-width: 420px;
+    }
+
+    /* ── CONTACT ── */
+    #page-contact {
+      padding: 80px 64px;
+      justify-content: center;
+    }
+
+    .contact-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 48px;
+    }
+
+    .contact-form {
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-field label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .form-field input,
+    .form-field textarea {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+      width: 100%;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus {
+      border-color: var(--soft);
+    }
+
+    .form-field textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    .form-submit {
+      align-self: flex-start;
+      background: none;
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0;
+      border-bottom: 1px solid var(--text);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .form-submit:hover { color: var(--soft); border-color: var(--soft); }
 
     /* ── ANIMATIONS ── */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
 
-    .fade-in { animation: fadeIn 0.35s ease forwards; }
-
-    /* ── RESPONSIVE ── */
+    /* ── MOBILE ── */
     @media (max-width: 768px) {
-      header { padding: 24px 28px; }
-      .inner { padding: 120px 28px 60px; }
-      #page-home { padding: 0 28px; }
-      .bio-grid { grid-template-columns: 1fr; gap: 40px; }
-      .film-row { grid-template-columns: 60px 1fr; }
-      .film-row-role, .film-row-format { display: none; }
-      nav { gap: 20px; }
-      footer { padding: 20px 28px; flex-direction: column; gap: 6px; }
+      :root { --sidebar: 0px; }
+
+      aside {
+        width: 100%;
+        min-height: auto;
+        height: auto;
+        position: relative;
+        flex-direction: row;
+        align-items: center;
+        padding: 20px 24px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        gap: 24px;
+      }
+
+      .site-role { display: none; }
+      .site-name { margin-bottom: 0; }
+
+      nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0 20px;
+      }
+
+      .films-dropdown { display: none !important; }
+      .nav-social { display: none; }
+      body { flex-direction: column; }
+      main { margin-left: 0; }
+      #page-about { flex-direction: column; }
+      .about-photo { width: 100%; min-height: 50vw; }
+      .films-grid { grid-template-columns: 1fr; }
+      .film-page, #page-films, #page-contact { padding: 40px 28px; }
+      .about-content { padding: 40px 28px; }
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <a class="logo" onclick="showPage('home')">Yifan Xiao</a>
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="site-name" onclick="showPage('home')">Yifan Xiao</div>
+    <div class="site-role">Director of Photography</div>
     <nav>
-      <button onclick="showPage('bio')"     id="nav-bio">Bio</button>
-      <button onclick="showPage('reel')"    id="nav-reel">Reel</button>
-      <button onclick="showPage('films')"   id="nav-films">Films</button>
-      <button onclick="showPage('contact')" id="nav-contact">Contact</button>
-    </nav>
-  </header>
-
-  <!-- HOME -->
-  <div class="page active" id="page-home">
-    <div class="home-inner">
-      <div class="home-name">Yifan Xiao</div>
-      <div class="home-title">Director of Photography</div>
-      <button class="home-cta" onclick="showPage('films')">View Work</button>
-    </div>
-  </div>
-
-  <!-- BIO -->
-  <div class="page" id="page-bio">
-    <div class="inner">
-      <div class="page-label">Biography</div>
-      <div class="bio-grid">
-        <div class="bio-facts">
-          <div class="bio-fact">
-            <span class="fact-label">Based</span>
-            <span class="fact-value">New York, NY</span>
-          </div>
-          <div class="bio-fact">
-            <span class="fact-label">Program</span>
-            <span class="fact-value">MFA Film, NYU Tisch</span>
-          </div>
-          <div class="bio-fact">
-            <span class="fact-label">Languages</span>
-            <span class="fact-value">English, Mandarin</span>
-          </div>
-          <div class="bio-fact">
-            <span class="fact-label">Formats</span>
-            <span class="fact-value">16mm, 35mm, Digital</span>
-          </div>
-          <div class="bio-fact">
-            <span class="fact-label">Equipment</span>
-            <span class="fact-value">ARRI, RED, Bolex</span>
-          </div>
-        </div>
-        <div class="bio-body">
-          <p>
-            Yifan Xiao is a Director of Photography based in New York, currently completing an MFA in Film at NYU Tisch School of the Arts. Their work spans narrative fiction, documentary, and experimental forms — with a particular fluency in shooting on film.
-          </p>
-          <p>
-            Drawn to images that feel held rather than captured, Yifan approaches cinematography as a practice of attention: light as emotional register, frame as point of view. They shoot in both English and Mandarin-language productions, bringing sensitivity to the visual grammar of in-between spaces.
-          </p>
-          <p>
-            Recent projects include work shot on Kodak 250D and 500T stocks, color graded in DaVinci Resolve using the Kodak 2383 D65 LUT.
-          </p>
+      <div class="nav-item">
+        <button class="nav-link" id="nav-reel" onclick="showPage('reel')">Reel</button>
+      </div>
+      <div class="nav-item" id="films-nav-item">
+        <button class="nav-link" id="nav-films" onclick="showPage('films')">Films</button>
+        <div class="films-dropdown" id="films-dropdown">
+          <button class="film-nav-link" onclick="showFilm('endless-sleep')">Endless Sleep</button>
+          <button class="film-nav-link" onclick="showFilm('speechless')">Speechless</button>
+          <button class="film-nav-link" onclick="showFilm('deadline')">Deadline</button>
+          <button class="film-nav-link" onclick="showFilm('recital')">Recital</button>
+          <button class="film-nav-link" onclick="showFilm('tacha-skan')">Tacha Skan</button>
+          <button class="film-nav-link" onclick="showFilm('personal-message')">Personal Message</button>
+          <button class="film-nav-link" onclick="showFilm('woksape-wisdom')">Woksape: Wisdom</button>
+          <button class="film-nav-link" onclick="showFilm('there-is-no-wind')">There Is No Wind</button>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="nav-item">
+        <button class="nav-link" id="nav-about" onclick="showPage('about')">About</button>
+      </div>
+      <div class="nav-item">
+        <button class="nav-link" id="nav-contact" onclick="showPage('contact')">Contact</button>
+      </div>
+    </nav>
+    <a class="nav-social" href="https://instagram.com/yifanxiao" target="_blank">Instagram</a>
+  </aside>
 
-  <!-- REEL -->
-  <div class="page" id="page-reel">
-    <div class="inner">
-      <div class="page-label">Reel</div>
+  <!-- MAIN -->
+  <main>
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="home-photo" id="home-photo">
+        <!-- Replace the line below with: <img src="your-photo.jpg" alt="Yifan Xiao"> -->
+        <span class="photo-placeholder">Add your photo here</span>
+      </div>
+      <div class="home-text">
+        <div class="home-name">Yifan Xiao</div>
+        <div class="home-title">Director of Photography</div>
+      </div>
+    </div>
+
+    <!-- REEL -->
+    <div class="page" id="page-reel">
       <div class="reel-wrap" id="reel-wrap">
         <div class="play-overlay" id="play-overlay" onclick="loadReel()">
           <div class="play-circle">
@@ -409,74 +614,130 @@
           </div>
         </div>
       </div>
-      <p class="reel-note">Cinematography reel · 2025</p>
     </div>
-  </div>
 
-  <!-- FILMS -->
-  <div class="page" id="page-films">
-    <div class="inner">
-      <div class="page-label">Selected Work</div>
-      <div class="films-list">
-
-        <div class="film-row">
-          <span class="film-row-year">2025</span>
-          <span class="film-row-title">Glance</span>
-          <span class="film-row-role">DP / Director</span>
-          <span class="film-row-format">16mm · Short</span>
+    <!-- FILMS LIST -->
+    <div class="page" id="page-films">
+      <div class="films-grid">
+        <div class="film-thumb" onclick="showFilm('endless-sleep')">
+          <!-- <img src="endless-sleep.jpg" alt="Endless Sleep"> -->
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">Endless Sleep</span>
+          </div>
         </div>
-
-        <div class="film-row">
-          <span class="film-row-year">2025</span>
-          <span class="film-row-title">Woksape: Wisdom</span>
-          <span class="film-row-role">Director of Photography</span>
-          <span class="film-row-format">Digital · Short</span>
+        <div class="film-thumb" onclick="showFilm('speechless')">
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">Speechless</span>
+          </div>
         </div>
-
-        <!-- Add more films by copying a film-row block above -->
-
+        <div class="film-thumb" onclick="showFilm('deadline')">
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">Deadline</span>
+          </div>
+        </div>
+        <div class="film-thumb" onclick="showFilm('recital')">
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">Recital</span>
+          </div>
+        </div>
+        <div class="film-thumb" onclick="showFilm('tacha-skan')">
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">Tacha Skan</span>
+          </div>
+        </div>
+        <div class="film-thumb" onclick="showFilm('personal-message')">
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">Personal Message</span>
+          </div>
+        </div>
+        <div class="film-thumb" onclick="showFilm('woksape-wisdom')">
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">Woksape: Wisdom</span>
+          </div>
+        </div>
+        <div class="film-thumb" onclick="showFilm('there-is-no-wind')">
+          <div class="film-thumb-overlay">
+            <span class="film-thumb-title">There Is No Wind</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- CONTACT -->
-  <div class="page" id="page-contact">
-    <div class="inner">
-      <div class="page-label">Contact</div>
-      <div class="contact-line">Available for narrative<br>and independent productions.</div>
-      <div class="contact-items">
-        <a class="contact-item" href="mailto:yifan@yifanxiao.com">
-          <span class="contact-item-label">Email</span>
-          <span class="contact-item-value">yifan@yifanxiao.com</span>
-          <span class="contact-arrow">↗</span>
-        </a>
-        <a class="contact-item" href="https://vimeo.com/yifanxiao" target="_blank">
-          <span class="contact-item-label">Vimeo</span>
-          <span class="contact-item-value">vimeo.com/yifanxiao</span>
-          <span class="contact-arrow">↗</span>
-        </a>
-        <a class="contact-item" href="https://instagram.com/yifanxiao" target="_blank">
-          <span class="contact-item-label">Instagram</span>
-          <span class="contact-item-value">@yifanxiao</span>
-          <span class="contact-arrow">↗</span>
-        </a>
+    <!-- INDIVIDUAL FILM PAGES -->
+    <div class="page film-page" id="page-film">
+      <button class="film-page-back" onclick="showPage('films')">← Films</button>
+      <div class="film-page-image" id="film-page-image">
+        <!-- Image will go here -->
+        <span class="film-page-image-placeholder">Add your still here</span>
+      </div>
+      <div class="film-page-title" id="film-page-title"></div>
+      <div class="film-page-meta" id="film-page-meta"></div>
+      <div class="film-page-desc" id="film-page-desc">Add your film description here.</div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="page" id="page-about">
+      <div class="about-photo">
+        <!-- Replace the line below with: <img src="your-portrait.jpg" alt="Yifan Xiao"> -->
+        <span class="photo-placeholder">Add your portrait here</span>
+      </div>
+      <div class="about-content">
+        <div class="about-label">About</div>
+        <p class="about-bio">
+          Yifan Xiao is a filmmaker and Graduate Film MFA candidate at NYU Tisch. Working across directing and cinematography, his films have screened internationally.
+        </p>
       </div>
     </div>
-  </div>
 
-  <footer>
-    <span>© 2025 Yifan Xiao</span>
-    <span>Director of Photography · New York</span>
-  </footer>
+    <!-- CONTACT -->
+    <div class="page" id="page-contact">
+      <div class="contact-label">Contact</div>
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="f-name">Name</label>
+            <input id="f-name" type="text" autocomplete="name" required>
+          </div>
+          <div class="form-field">
+            <label for="f-email">Email</label>
+            <input id="f-email" type="email" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="f-subject">Subject</label>
+          <input id="f-subject" type="text">
+        </div>
+        <div class="form-field">
+          <label for="f-message">Message</label>
+          <textarea id="f-message" required></textarea>
+        </div>
+        <button class="form-submit" type="submit">Send</button>
+      </form>
+    </div>
+
+  </main>
 
   <script>
-    // ── Replace with your actual Vimeo video ID (the number in your Vimeo URL) ──
+    /* ── Replace with your actual Vimeo video ID ── */
     const VIMEO_ID = 'YOUR_VIMEO_ID';
+
+    /* Film data — add your info for each film */
+    const films = {
+      'endless-sleep':    { title: 'Endless Sleep',     meta: '2024 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+      'speechless':       { title: 'Speechless',         meta: '2024 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+      'deadline':         { title: 'Deadline',           meta: '2024 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+      'recital':          { title: 'Recital',            meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+      'tacha-skan':       { title: 'Tacha Skan',         meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+      'personal-message': { title: 'Personal Message',   meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+      'woksape-wisdom':   { title: 'Woksape: Wisdom',    meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+      'there-is-no-wind': { title: 'There Is No Wind',  meta: '2022 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+    };
 
     function showPage(name) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
       const page = document.getElementById('page-' + name);
+      if (!page) return;
       page.classList.add('active');
       void page.offsetWidth;
       page.classList.add('fade-in');
@@ -485,17 +746,46 @@
       window.scrollTo(0, 0);
     }
 
+    function showFilm(slug) {
+      const film = films[slug];
+      if (!film) return;
+      document.getElementById('film-page-title').textContent = film.title;
+      document.getElementById('film-page-meta').textContent = film.meta;
+      document.getElementById('film-page-desc').textContent = film.desc;
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
+      document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+      const page = document.getElementById('page-film');
+      page.classList.add('active');
+      void page.offsetWidth;
+      page.classList.add('fade-in');
+      document.getElementById('nav-films').classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
     function loadReel() {
       if (VIMEO_ID === 'YOUR_VIMEO_ID') {
-        alert('Please replace YOUR_VIMEO_ID in the HTML with your actual Vimeo video ID.');
+        alert('Replace YOUR_VIMEO_ID in the HTML with your Vimeo video ID.');
         return;
       }
-      document.getElementById('play-overlay').remove();
+      const overlay = document.getElementById('play-overlay');
+      if (overlay) overlay.remove();
       const iframe = document.createElement('iframe');
-      iframe.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&title=0&byline=0&portrait=0`;
+      iframe.src = 'https://player.vimeo.com/video/' + VIMEO_ID + '?autoplay=1&title=0&byline=0&portrait=0';
       iframe.allow = 'autoplay; fullscreen';
       iframe.allowFullscreen = true;
       document.getElementById('reel-wrap').appendChild(iframe);
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('f-name').value;
+      const email = document.getElementById('f-email').value;
+      const subject = document.getElementById('f-subject').value;
+      const message = document.getElementById('f-message').value;
+      /* To receive messages, replace this with a form service like Formspree:
+         Action: <form action="https://formspree.io/f/YOUR_ID" method="POST">
+         Then remove this onsubmit handler and the script below */
+      window.location.href = `mailto:yifan@yifanxiao.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
     }
   </script>
 
