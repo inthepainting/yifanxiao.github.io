@@ -767,13 +767,13 @@
       .slide-arrow { display: none; }
       .still-arrow { display: none; }
 
-      /* Home dots — visible mobile only */
+      /* Home dots — visible mobile only, above bottom edge */
       .home-dots {
         display: flex;
         justify-content: center;
         gap: 7px;
         position: absolute;
-        bottom: 18px;
+        bottom: 28px;
         left: 0; right: 0;
         z-index: 20;
         pointer-events: none;
@@ -814,9 +814,28 @@
       /* Film individual page */
       .film-page-inner { padding: 28px 18px 60px; }
 
+      /* Stills: sliding animation on mobile */
+      .stills-track {
+        overflow: hidden;
+        min-height: 0;
+      }
+      .stills-track-inner {
+        display: flex;
+        transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        will-change: transform;
+      }
+      .still-slide {
+        display: flex !important;
+        flex-shrink: 0;
+        width: 100%;
+      }
+      .still-slide img {
+        max-height: 55vh;
+      }
+
       /* Contact: top-align and lots of bottom room */
       #page-contact {
-        padding: 40px 18px 120px;
+        padding: 40px 18px 160px;
         justify-content: flex-start;
       }
       .form-row { grid-template-columns: 1fr; gap: 24px; }
@@ -824,7 +843,7 @@
       /* About */
       #page-about.active {
         flex-direction: column;
-        padding: 32px 18px 60px;
+        padding: 32px 18px 100px;
         gap: 28px;
         align-items: flex-start;
       }
@@ -1224,7 +1243,13 @@
 
           const dot = document.createElement('button');
           dot.className = 'stills-dot' + (i === 0 ? ' active' : '');
-          dot.onclick = () => goToStill(i);
+          dot.onclick = () => {
+            if (window.goToStillPatched && window.innerWidth <= 640) {
+              window.goToStillPatched(i);
+            } else {
+              goToStill(i);
+            }
+          };
           dots.appendChild(dot);
         });
 
@@ -1243,6 +1268,10 @@
       document.getElementById('nav-films').classList.add('active');
       page.scrollTop = 0;
       filmsDrop.classList.remove('open');
+      // Reset stills track position for mobile sliding
+      const inner2 = document.getElementById('stills-track-inner');
+      if (inner2) { inner2.style.transition = 'none'; inner2.style.transform = 'translateX(0)'; }
+      document.dispatchEvent(new Event('filmLoaded'));
     }
 
     function goToStill(idx) {
@@ -1255,7 +1284,13 @@
       if (dots[stillIdx]) dots[stillIdx].classList.add('active');
     }
 
-    function moveStill(dir) { goToStill(stillIdx + dir); }
+    function moveStill(dir) {
+      if (window.goToStillPatched && window.innerWidth <= 640) {
+        window.goToStillPatched(stillIdx + dir);
+      } else {
+        goToStill(stillIdx + dir);
+      }
+    }
 
     /* ══════════════════════════════
        FILMS TAB TOGGLE
@@ -1345,15 +1380,73 @@
       }, { passive: true });
     })();
 
-    // Swipe on film stills (mobile)
+    // Swipe on film stills (mobile) — smooth sliding
     (function() {
-      const el = document.getElementById('stills-track');
-      let tx = 0;
-      el.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-      el.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - tx;
-        if (Math.abs(dx) > 45) { moveStill(dx < 0 ? 1 : -1); }
+      const track = document.getElementById('stills-track');
+      const inner = document.getElementById('stills-track-inner');
+      let tx = 0, dragging = false, dragOffset = 0;
+      const isMobile = () => window.innerWidth <= 640;
+
+      function getSlideWidth() { return track.getBoundingClientRect().width; }
+
+      function setTranslate(px, animated) {
+        inner.style.transition = animated
+          ? 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)'
+          : 'none';
+        inner.style.transform = `translateX(${px}px)`;
+      }
+
+      function syncTranslate(animated) {
+        setTranslate(-stillIdx * getSlideWidth(), animated);
+      }
+
+      // Override goToStill on mobile to use translate
+      const _goToStill = goToStill;
+      function goToStillMobile(idx) {
+        if (!isMobile()) { _goToStill(idx); return; }
+        const slides = document.querySelectorAll('#stills-track-inner .still-slide');
+        const dots   = document.querySelectorAll('.stills-dot');
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        stillIdx = (idx + slides.length) % slides.length;
+        slides[stillIdx].classList.add('active');
+        if (dots[stillIdx]) dots[stillIdx].classList.add('active');
+        syncTranslate(true);
+      }
+
+      // Patch global goToStill
+      window.goToStillPatched = goToStillMobile;
+
+      track.addEventListener('touchstart', e => {
+        if (!isMobile()) return;
+        tx = e.touches[0].clientX;
+        dragging = true;
+        dragOffset = 0;
+        inner.style.transition = 'none';
       }, { passive: true });
+
+      track.addEventListener('touchmove', e => {
+        if (!isMobile() || !dragging) return;
+        dragOffset = e.touches[0].clientX - tx;
+        setTranslate(-stillIdx * getSlideWidth() + dragOffset, false);
+      }, { passive: true });
+
+      track.addEventListener('touchend', e => {
+        if (!isMobile() || !dragging) return;
+        dragging = false;
+        const dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 45) {
+          goToStillMobile(stillIdx + (dx < 0 ? 1 : -1));
+        } else {
+          syncTranslate(true); // snap back
+        }
+      }, { passive: true });
+
+      // Re-sync position when a new film is loaded
+      const _showFilm = window.showFilmOrig || null;
+      document.addEventListener('filmLoaded', () => {
+        if (isMobile()) { inner.style.transition = 'none'; inner.style.transform = 'translateX(0)'; }
+      });
     })();
 
     /* ══════════════════════════════
