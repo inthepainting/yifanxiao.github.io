@@ -3,345 +3,251 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yifan Xiao</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <title>YIFAN XIAO</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:      #f9f8f5;
-      --text:    #2c2b28;
-      --soft:    #7a7870;
-      --border:  #e5e3de;
-      --hover:   #f2f0ec;
-      --sidebar: 220px;
+      --bg:     #090908;
+      --text:   #e2e0da;
+      --dim:    #6a6864;
+      --faint:  #222120;
+      --border: #1e1d1b;
+      --hdr:    68px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    html, body { height: 100%; overflow: hidden; }
 
     body {
-      font-family: 'Jost', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-weight: 300;
       background: var(--bg);
       color: var(--text);
-      display: flex;
     }
 
-    /* ── SIDEBAR ── */
-    aside {
-      width: var(--sidebar);
-      min-height: 100vh;
-      border-right: 1px solid var(--border);
-      padding: 48px 32px;
+    /* ═══════════════════════════════
+       HEADER — always on top
+    ═══════════════════════════════ */
+    header {
       position: fixed;
-      top: 0; left: 0; bottom: 0;
+      top: 0; left: 0; right: 0;
+      height: var(--hdr);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(9,9,8,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
       display: flex;
       flex-direction: column;
-      z-index: 100;
-      background: var(--bg);
-    }
-
-    .site-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      margin-bottom: 6px;
+      gap: 4px;
       cursor: pointer;
-      color: var(--text);
     }
 
-    .site-role {
-      font-size: 10px;
+    .logo-name {
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .logo-role {
+      font-size: 8.5px;
       font-weight: 300;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--soft);
-      margin-bottom: 56px;
+      letter-spacing: 0.22em;
+      color: var(--dim);
+      line-height: 1;
     }
 
     nav {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
+      align-items: center;
+      gap: 36px;
     }
 
-    .nav-item {
-      position: relative;
-    }
-
-    .nav-link {
-      display: block;
-      font-size: 13px;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      color: var(--soft);
-      cursor: pointer;
-      padding: 7px 0;
-      transition: color 0.2s;
+    .nav-btn {
       background: none;
       border: none;
-      font-family: 'Jost', sans-serif;
-      text-align: left;
-      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10.5px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s;
     }
 
-    .nav-link:hover,
-    .nav-link.active { color: var(--text); }
+    .nav-btn:hover,
+    .nav-btn.active { color: var(--text); }
 
     /* Films dropdown */
-    .films-dropdown {
+    .films-nav { position: relative; }
+
+    .films-drop {
       display: none;
       flex-direction: column;
-      gap: 2px;
-      padding: 4px 0 4px 12px;
-      border-left: 1px solid var(--border);
-      margin-left: 2px;
+      position: absolute;
+      top: calc(100% + 20px);
+      right: 0;
+      background: #111110;
+      border: 1px solid var(--border);
+      min-width: 210px;
+      padding: 10px 0;
     }
 
-    .nav-item:hover .films-dropdown,
-    .nav-item.open .films-dropdown {
-      display: flex;
-    }
+    .films-drop.open { display: flex; }
 
-    .film-nav-link {
-      font-size: 11.5px;
-      font-weight: 300;
-      color: var(--soft);
-      cursor: pointer;
-      padding: 4px 0;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
+    .drop-btn {
       background: none;
       border: none;
-      font-family: 'Jost', sans-serif;
-      text-align: left;
-    }
-
-    .film-nav-link:hover { color: var(--text); }
-
-    .nav-social {
+      font-family: 'DM Sans', sans-serif;
       font-size: 11px;
-      color: var(--soft);
+      font-weight: 300;
       letter-spacing: 0.05em;
-      text-decoration: none;
-      transition: color 0.2s;
+      color: var(--dim);
+      padding: 9px 22px;
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s;
+      width: 100%;
     }
 
-    .nav-social:hover { color: var(--text); }
+    .drop-btn:hover { color: var(--text); background: #1a1a18; }
 
-    /* ── MAIN ── */
-    main {
-      margin-left: var(--sidebar);
-      flex: 1;
-      min-height: 100vh;
-    }
-
-    .page { display: none; min-height: 100vh; }
-    .page.active { display: flex; flex-direction: column; }
-
-    /* ── HOME ── */
-    #page-home {
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .home-photo {
-      position: absolute;
+    /* ═══════════════════════════════
+       PAGE SYSTEM — truly isolated
+    ═══════════════════════════════ */
+    .page {
+      display: none;
+      position: fixed;
       inset: 0;
-      background: #e8e6e0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: var(--hdr);
+      background: var(--bg);
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 10;
     }
 
-    .photo-placeholder {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #b0ae a8;
-      color: #b5b3ac;
+    /* Home has no top offset — full screen cover */
+    #page-home {
+      top: 0;
     }
 
-    .home-photo img {
+    .page.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .fade-in { animation: fadeIn 0.35s ease forwards; }
+
+    /* ═══════════════════════════════
+       HOME — fullscreen slideshow
+    ═══════════════════════════════ */
+    #page-home {
+      height: 100vh;
+    }
+
+    .slideshow {
+      position: relative;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .home-text {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 40px;
-    }
-
-    .home-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(42px, 6vw, 80px);
-      font-weight: 300;
-      letter-spacing: 0.06em;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 14px;
-    }
-
-    .home-title {
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--soft);
-    }
-
-    /* ── FILMS LIST PAGE ── */
-    #page-films {
-      padding: 60px 64px;
-    }
-
-    .films-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 3px;
-    }
-
-    .film-thumb {
-      position: relative;
-      aspect-ratio: 16/10;
-      background: #e0ded9;
-      cursor: pointer;
+      background: #111;
       overflow: hidden;
     }
 
-    .film-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: opacity 0.4s;
-    }
-
-    .film-thumb-overlay {
+    .slide {
       position: absolute;
       inset: 0;
-      background: rgba(44,43,40,0);
-      display: flex;
-      align-items: flex-end;
-      padding: 24px;
-      transition: background 0.3s;
-    }
-
-    .film-thumb:hover .film-thumb-overlay {
-      background: rgba(44,43,40,0.45);
-    }
-
-    .film-thumb-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-weight: 300;
-      color: white;
-      letter-spacing: 0.04em;
       opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s, transform 0.3s;
+      transition: opacity 0.9s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .film-thumb:hover .film-thumb-title {
-      opacity: 1;
-      transform: translateY(0);
+    .slide.active { opacity: 1; }
+
+    .slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    /* ── INDIVIDUAL FILM PAGE ── */
-    .film-page {
-      padding: 60px 64px;
+    .slide-ph {
+      width: 100%; height: 100%;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      color: #2a2a28;
     }
 
-    .film-page-back {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--soft);
-      cursor: pointer;
+    /* Slideshow arrows */
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
       background: none;
       border: none;
-      font-family: 'Jost', sans-serif;
-      padding: 0;
-      margin-bottom: 40px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      cursor: pointer;
+      padding: 20px 28px;
+      color: rgba(226,224,218,0.45);
       transition: color 0.2s;
+      font-size: 20px;
+      line-height: 1;
     }
 
-    .film-page-back:hover { color: var(--text); }
+    .slide-arrow:hover { color: rgba(226,224,218,0.9); }
+    .slide-arrow.left { left: 12px; }
+    .slide-arrow.right { right: 12px; }
 
-    .film-page-image {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #e0ded9;
-      margin-bottom: 32px;
-      display: flex;
+    /* Home text overlay */
+    .home-overlay-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 48px 40px;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════
+       REEL
+    ═══════════════════════════════ */
+    #page-reel {
+      display: none;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      background: #000;
     }
 
-    .film-page-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .film-page-image-placeholder {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #b5b3ac;
-    }
-
-    .film-page-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 36px;
-      font-weight: 300;
-      letter-spacing: 0.03em;
-      margin-bottom: 16px;
-    }
-
-    .film-page-meta {
-      font-size: 12px;
-      color: var(--soft);
-      letter-spacing: 0.08em;
-      margin-bottom: 24px;
-    }
-
-    .film-page-desc {
-      font-size: 15px;
-      line-height: 1.9;
-      color: var(--soft);
-      max-width: 560px;
-    }
-
-    /* ── REEL ── */
-    #page-reel {
-      align-items: stretch;
-      justify-content: center;
+    #page-reel.active {
+      display: flex;
+      height: calc(100vh - var(--hdr));
     }
 
     .reel-wrap {
       position: relative;
       width: 100%;
       padding-bottom: 56.25%;
-      background: #1a1916;
-      flex: 1;
     }
 
     .reel-wrap iframe {
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       border: none;
     }
 
@@ -354,10 +260,9 @@
       cursor: pointer;
     }
 
-    .play-circle {
-      width: 60px;
-      height: 60px;
-      border: 1px solid rgba(255,255,255,0.3);
+    .play-ring {
+      width: 58px; height: 58px;
+      border: 1px solid rgba(255,255,255,0.22);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -365,39 +270,270 @@
       transition: border-color 0.25s, background 0.25s;
     }
 
-    .play-overlay:hover .play-circle {
-      border-color: rgba(255,255,255,0.7);
-      background: rgba(255,255,255,0.05);
+    .play-overlay:hover .play-ring {
+      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.04);
     }
 
-    /* ── ABOUT ── */
-    #page-about {
-      flex-direction: row;
+    /* ═══════════════════════════════
+       FILMS GALLERY
+    ═══════════════════════════════ */
+    #page-films {
+      min-height: calc(100vh - var(--hdr));
     }
 
-    .about-photo {
-      width: 45%;
-      background: #e0ded9;
+    .films-header {
+      display: flex;
+      gap: 28px;
+      padding: 36px 48px 28px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(9,9,8,0.95);
+      backdrop-filter: blur(6px);
+      z-index: 5;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10.5px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      cursor: pointer;
+      padding: 0 0 4px;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .toggle-btn.active {
+      color: var(--text);
+      border-bottom-color: var(--text);
+    }
+
+    .film-grid { display: none; }
+    .film-grid.active {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 2px;
+    }
+
+    .film-card {
       position: relative;
-      min-height: 100vh;
+      aspect-ratio: 3/2;
+      background: #111;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .film-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.55s ease, opacity 0.3s;
+    }
+
+    .film-card:hover img {
+      transform: scale(1.04);
+      opacity: 0.65;
+    }
+
+    .film-card-ph {
+      position: absolute;
+      inset: 0;
+      background: #111;
+    }
+
+    .film-card-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 18px 20px;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .film-card:hover .film-card-overlay { opacity: 1; }
+
+    .film-card-title {
+      font-size: 12.5px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: #fff;
+    }
+
+    /* ═══════════════════════════════
+       INDIVIDUAL FILM PAGE
+    ═══════════════════════════════ */
+    #page-film {
+      min-height: calc(100vh - var(--hdr));
+    }
+
+    .film-page-inner {
+      padding: 44px 48px 80px;
+    }
+
+    .film-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      padding: 0;
+      margin-bottom: 40px;
+      transition: color 0.2s;
+    }
+
+    .film-back:hover { color: var(--text); }
+
+    .film-title-block {
+      margin-bottom: 36px;
+    }
+
+    .film-title-name {
+      font-size: clamp(22px, 3.5vw, 40px);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 9px;
+      line-height: 1.1;
+    }
+
+    .film-title-role {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+    }
+
+    /* Stills carousel */
+    .stills-carousel {
+      position: relative;
+      width: 100%;
+    }
+
+    .stills-track {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #111;
+      overflow: hidden;
+    }
+
+    .still-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+
+    .still-slide.active { opacity: 1; }
+
+    .still-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .still-ph {
+      width: 100%; height: 100%;
+      background: #111;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: #2a2a28;
     }
 
-    .about-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .still-arrow {
       position: absolute;
-      inset: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 16px 24px;
+      color: rgba(226,224,218,0.4);
+      transition: color 0.2s;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .still-arrow:hover { color: rgba(226,224,218,0.85); }
+    .still-arrow.left  { left: 0; }
+    .still-arrow.right { right: 0; }
+
+    .stills-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .stills-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--dim);
+      transition: background 0.2s;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+    }
+
+    .stills-dot.active { background: var(--text); }
+
+    /* ═══════════════════════════════
+       ABOUT
+    ═══════════════════════════════ */
+    #page-about {
+      display: none;
+      min-height: calc(100vh - var(--hdr));
+    }
+
+    #page-about.active {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .about-img {
+      position: sticky;
+      top: 0;
+      height: calc(100vh - var(--hdr));
+      background: #111;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .about-img-ph {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: #2a2a28;
     }
 
     .about-content {
-      flex: 1;
-      padding: 80px 64px;
+      padding: 80px 60px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -406,72 +542,86 @@
     .about-label {
       font-size: 10px;
       font-weight: 400;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--soft);
-      margin-bottom: 36px;
+      letter-spacing: 0.22em;
+      color: var(--dim);
+      margin-bottom: 32px;
     }
 
     .about-bio {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
+      font-size: clamp(14px, 1.5vw, 18px);
       font-weight: 300;
-      line-height: 1.75;
-      letter-spacing: 0.01em;
+      line-height: 1.9;
       color: var(--text);
-      max-width: 420px;
     }
 
-    /* ── CONTACT ── */
+    /* ═══════════════════════════════
+       CONTACT
+    ═══════════════════════════════ */
     #page-contact {
-      padding: 80px 64px;
+      min-height: calc(100vh - var(--hdr));
+      display: none;
+      flex-direction: column;
       justify-content: center;
+      padding: 64px 48px 80px;
     }
+
+    #page-contact.active { display: flex; }
 
     .contact-label {
       font-size: 10px;
       font-weight: 400;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--soft);
-      margin-bottom: 48px;
+      letter-spacing: 0.22em;
+      color: var(--dim);
+      margin-bottom: 14px;
     }
+
+    .contact-email {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+      text-decoration: none;
+      margin-bottom: 52px;
+      transition: color 0.2s;
+    }
+
+    .contact-email:hover { color: var(--text); }
 
     .contact-form {
       max-width: 520px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 28px;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 28px;
     }
 
     .form-field {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 9px;
     }
 
     .form-field label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--soft);
+      letter-spacing: 0.2em;
+      color: var(--dim);
     }
 
     .form-field input,
     .form-field textarea {
       background: none;
       border: none;
-      border-bottom: 1px solid var(--border);
-      padding: 8px 0;
-      font-family: 'Jost', sans-serif;
-      font-size: 14px;
+      border-bottom: 1px solid var(--faint);
+      padding: 9px 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
       font-weight: 300;
       color: var(--text);
       outline: none;
@@ -481,313 +631,555 @@
     }
 
     .form-field input:focus,
-    .form-field textarea:focus {
-      border-color: var(--soft);
-    }
+    .form-field textarea:focus { border-bottom-color: var(--dim); }
 
     .form-field textarea {
       resize: none;
-      height: 100px;
+      height: 88px;
     }
 
     .form-submit {
       align-self: flex-start;
       background: none;
       border: none;
-      font-family: 'Jost', sans-serif;
-      font-size: 12px;
-      font-weight: 300;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
       color: var(--text);
       cursor: pointer;
-      padding: 0;
-      border-bottom: 1px solid var(--text);
-      padding-bottom: 2px;
+      padding: 0 0 3px;
+      border-bottom: 1px solid rgba(226,224,218,0.2);
       transition: color 0.2s, border-color 0.2s;
     }
 
-    .form-submit:hover { color: var(--soft); border-color: var(--soft); }
+    .form-submit:hover { color: var(--dim); border-color: var(--dim); }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .form-success {
+      display: none;
+      margin-top: 20px;
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--dim);
     }
-    .fade-in { animation: fadeIn 0.4s ease forwards; }
 
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      :root { --sidebar: 0px; }
-
-      aside {
-        width: 100%;
-        min-height: auto;
-        height: auto;
-        position: relative;
-        flex-direction: row;
-        align-items: center;
-        padding: 20px 24px;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        gap: 24px;
-      }
-
-      .site-role { display: none; }
-      .site-name { margin-bottom: 0; }
-
-      nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0 20px;
-      }
-
-      .films-dropdown { display: none !important; }
-      .nav-social { display: none; }
-      body { flex-direction: column; }
-      main { margin-left: 0; }
-      #page-about { flex-direction: column; }
-      .about-photo { width: 100%; min-height: 50vw; }
-      .films-grid { grid-template-columns: 1fr; }
-      .film-page, #page-films, #page-contact { padding: 40px 28px; }
-      .about-content { padding: 40px 28px; }
+    /* ═══════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════ */
+    @media (max-width: 860px) {
+      header { padding: 0 24px; }
+      nav { gap: 20px; }
+      .nav-btn { font-size: 9.5px; letter-spacing: 0.14em; }
+      .film-grid.active { grid-template-columns: 1fr 1fr; }
+      .film-page-inner, .films-header { padding-left: 24px; padding-right: 24px; }
+      #page-about.active { grid-template-columns: 1fr; }
+      .about-img { height: 60vw; position: relative; }
+      .about-content { padding: 48px 24px; }
+      #page-contact { padding: 52px 24px 60px; }
       .form-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .film-grid.active { grid-template-columns: 1fr; }
+      .logo-role { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <aside>
-    <div class="site-name" onclick="showPage('home')">Yifan Xiao</div>
-    <div class="site-role">Director of Photography</div>
+  <!-- ═══ HEADER — always fixed ═══ -->
+  <header>
+    <div class="logo" onclick="showPage('home')">
+      <div class="logo-name">YIFAN XIAO</div>
+      <div class="logo-role">DIRECTOR OF PHOTOGRAPHY</div>
+    </div>
     <nav>
-      <div class="nav-item">
-        <button class="nav-link" id="nav-reel" onclick="showPage('reel')">Reel</button>
-      </div>
-      <div class="nav-item" id="films-nav-item">
-        <button class="nav-link" id="nav-films" onclick="showPage('films')">Films</button>
-        <div class="films-dropdown" id="films-dropdown">
-          <button class="film-nav-link" onclick="showFilm('endless-sleep')">Endless Sleep</button>
-          <button class="film-nav-link" onclick="showFilm('speechless')">Speechless</button>
-          <button class="film-nav-link" onclick="showFilm('deadline')">Deadline</button>
-          <button class="film-nav-link" onclick="showFilm('recital')">Recital</button>
-          <button class="film-nav-link" onclick="showFilm('tacha-skan')">Tacha Skan</button>
-          <button class="film-nav-link" onclick="showFilm('personal-message')">Personal Message</button>
-          <button class="film-nav-link" onclick="showFilm('woksape-wisdom')">Woksape: Wisdom</button>
-          <button class="film-nav-link" onclick="showFilm('there-is-no-wind')">There Is No Wind</button>
+      <button class="nav-btn active" id="nav-home"    onclick="showPage('home')">HOME</button>
+      <button class="nav-btn"        id="nav-reel"    onclick="showPage('reel')">REEL</button>
+      <div class="films-nav" id="films-nav">
+        <button class="nav-btn" id="nav-films" onclick="showPage('films')">FILMS</button>
+        <div class="films-drop" id="films-drop">
+          <button class="drop-btn" onclick="showFilm('woksape-wisdom')">Woksape: Wisdom</button>
+          <button class="drop-btn" onclick="showFilm('there-is-no-wind')">There Is No Wind</button>
+          <button class="drop-btn" onclick="showFilm('glance')">Glance</button>
+          <button class="drop-btn" onclick="showFilm('tacha-skan')">Tacha Skan</button>
+          <button class="drop-btn" onclick="showFilm('personal-message')">Personal Message</button>
+          <button class="drop-btn" onclick="showFilm('words')">Words</button>
+          <button class="drop-btn" onclick="showFilm('distant')">Distant</button>
+          <button class="drop-btn" onclick="showFilm('endless-sleep')">Endless Sleep</button>
+          <button class="drop-btn" onclick="showFilm('recital')">Recital</button>
         </div>
       </div>
-      <div class="nav-item">
-        <button class="nav-link" id="nav-about" onclick="showPage('about')">About</button>
-      </div>
-      <div class="nav-item">
-        <button class="nav-link" id="nav-contact" onclick="showPage('contact')">Contact</button>
-      </div>
+      <button class="nav-btn" id="nav-about"   onclick="showPage('about')">ABOUT</button>
+      <button class="nav-btn" id="nav-contact" onclick="showPage('contact')">CONTACT</button>
     </nav>
-    <a class="nav-social" href="https://instagram.com/yifanxiao" target="_blank">Instagram</a>
-  </aside>
+  </header>
 
-  <!-- MAIN -->
-  <main>
+  <!-- ═══ HOME ═══ -->
+  <div class="page active" id="page-home">
+    <div class="slideshow" id="home-slideshow">
+      <!--
+        TO ADD YOUR IMAGES:
+        Duplicate a .slide div for each image.
+        Replace the <div class="slide-ph"> with <img src="images/your-photo.jpg" alt="">
+        The first slide is active by default.
+      -->
+      <div class="slide active">
+        <div class="slide-ph">ADD YOUR PHOTO HERE</div>
+      </div>
+      <div class="slide">
+        <div class="slide-ph">ADD YOUR PHOTO HERE</div>
+      </div>
+      <div class="slide">
+        <div class="slide-ph">ADD YOUR PHOTO HERE</div>
+      </div>
 
-    <!-- HOME -->
-    <div class="page active" id="page-home">
-      <div class="home-photo" id="home-photo">
-        <!-- Replace the line below with: <img src="your-photo.jpg" alt="Yifan Xiao"> -->
-        <span class="photo-placeholder">Add your photo here</span>
-      </div>
-      <div class="home-text">
-        <div class="home-name">Yifan Xiao</div>
-        <div class="home-title">Director of Photography</div>
-      </div>
+      <button class="slide-arrow left"  onclick="moveSlide(-1)">&#8592;</button>
+      <button class="slide-arrow right" onclick="moveSlide(1)">&#8594;</button>
     </div>
+  </div>
 
-    <!-- REEL -->
-    <div class="page" id="page-reel">
+  <!-- ═══ REEL ═══ -->
+  <div class="page" id="page-reel">
+    <div style="width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;">
       <div class="reel-wrap" id="reel-wrap">
         <div class="play-overlay" id="play-overlay" onclick="loadReel()">
-          <div class="play-circle">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 2L14 8L4 14V2Z" fill="white"/>
+          <div class="play-ring">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 1.5L12 7L3 12.5V1.5Z" fill="rgba(226,224,218,0.65)"/>
             </svg>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- FILMS LIST -->
-    <div class="page" id="page-films">
-      <div class="films-grid">
-        <div class="film-thumb" onclick="showFilm('endless-sleep')">
-          <!-- <img src="endless-sleep.jpg" alt="Endless Sleep"> -->
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">Endless Sleep</span>
-          </div>
-        </div>
-        <div class="film-thumb" onclick="showFilm('speechless')">
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">Speechless</span>
-          </div>
-        </div>
-        <div class="film-thumb" onclick="showFilm('deadline')">
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">Deadline</span>
-          </div>
-        </div>
-        <div class="film-thumb" onclick="showFilm('recital')">
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">Recital</span>
-          </div>
-        </div>
-        <div class="film-thumb" onclick="showFilm('tacha-skan')">
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">Tacha Skan</span>
-          </div>
-        </div>
-        <div class="film-thumb" onclick="showFilm('personal-message')">
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">Personal Message</span>
-          </div>
-        </div>
-        <div class="film-thumb" onclick="showFilm('woksape-wisdom')">
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">Woksape: Wisdom</span>
-          </div>
-        </div>
-        <div class="film-thumb" onclick="showFilm('there-is-no-wind')">
-          <div class="film-thumb-overlay">
-            <span class="film-thumb-title">There Is No Wind</span>
-          </div>
-        </div>
+  <!-- ═══ FILMS GALLERY ═══ -->
+  <div class="page" id="page-films">
+    <div class="films-header">
+      <button class="toggle-btn active" id="toggle-cinema" onclick="switchTab('cinema')">CINEMATOGRAPHY</button>
+      <button class="toggle-btn"        id="toggle-direct" onclick="switchTab('direct')">DIRECTING</button>
+    </div>
+
+    <!-- Cinematography -->
+    <div class="film-grid active" id="grid-cinema">
+      <div class="film-card" onclick="showFilm('woksape-wisdom')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/woksape-wisdom.jpg" alt="Woksape: Wisdom"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Woksape: Wisdom</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('there-is-no-wind')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/there-is-no-wind.jpg" alt="There Is No Wind"> -->
+        <div class="film-card-overlay"><span class="film-card-title">There Is No Wind</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('tacha-skan')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/tacha-skan.jpg" alt="Tacha Skan"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Tacha Skan</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('personal-message')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/personal-message.jpg" alt="Personal Message"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Personal Message</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('endless-sleep')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/endless-sleep.jpg" alt="Endless Sleep"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Endless Sleep</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('recital')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/recital.jpg" alt="Recital"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Recital</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('deadline')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/deadline.jpg" alt="Deadline"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Deadline</span></div>
       </div>
     </div>
 
-    <!-- INDIVIDUAL FILM PAGES -->
-    <div class="page film-page" id="page-film">
-      <button class="film-page-back" onclick="showPage('films')">← Films</button>
-      <div class="film-page-image" id="film-page-image">
-        <!-- Image will go here -->
-        <span class="film-page-image-placeholder">Add your still here</span>
+    <!-- Directing -->
+    <div class="film-grid" id="grid-direct">
+      <div class="film-card" onclick="showFilm('glance')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/glance.jpg" alt="Glance"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Glance</span></div>
       </div>
-      <div class="film-page-title" id="film-page-title"></div>
-      <div class="film-page-meta" id="film-page-meta"></div>
-      <div class="film-page-desc" id="film-page-desc">Add your film description here.</div>
+      <div class="film-card" onclick="showFilm('words')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/words.jpg" alt="Words"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Words</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('distant')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/distant.jpg" alt="Distant"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Distant</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('whispers-of-the-sea')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/whispers-of-the-sea.jpg" alt="Whispers of the Sea"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Whispers of the Sea</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('when-the-earth-turns-blue')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/when-the-earth-turns-blue.jpg" alt="When the Earth Turns Blue"> -->
+        <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('after-the-pass')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/after-the-pass.jpg" alt="After the Pass"> -->
+        <div class="film-card-overlay"><span class="film-card-title">After the Pass</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('endless-sleep')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/endless-sleep.jpg" alt="Endless Sleep"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Endless Sleep</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('deadline')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/deadline.jpg" alt="Deadline"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Deadline</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('recital')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/recital.jpg" alt="Recital"> -->
+        <div class="film-card-overlay"><span class="film-card-title">Recital</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('in-the-painting')">
+        <div class="film-card-ph"></div>
+        <!-- <img src="images/in-the-painting.jpg" alt="In the Painting"> -->
+        <div class="film-card-overlay"><span class="film-card-title">In the Painting</span></div>
+      </div>
     </div>
+  </div>
 
-    <!-- ABOUT -->
-    <div class="page" id="page-about">
-      <div class="about-photo">
-        <!-- Replace the line below with: <img src="your-portrait.jpg" alt="Yifan Xiao"> -->
-        <span class="photo-placeholder">Add your portrait here</span>
+  <!-- ═══ INDIVIDUAL FILM ═══ -->
+  <div class="page" id="page-film">
+    <div class="film-page-inner">
+      <button class="film-back" onclick="showPage('films')">← FILMS</button>
+      <div class="film-title-block">
+        <div class="film-title-name" id="film-name"></div>
+        <div class="film-title-role" id="film-role"></div>
       </div>
-      <div class="about-content">
-        <div class="about-label">About</div>
-        <p class="about-bio">
-          Yifan Xiao is a filmmaker and Graduate Film MFA candidate at NYU Tisch. Working across directing and cinematography, his films have screened internationally.
-        </p>
+      <div class="stills-carousel" id="stills-carousel">
+        <div class="stills-track" id="stills-track">
+          <!-- Populated by JS -->
+        </div>
+        <button class="still-arrow left"  id="still-prev" onclick="moveStill(-1)">&#8592;</button>
+        <button class="still-arrow right" id="still-next" onclick="moveStill(1)">&#8594;</button>
+        <div class="stills-dots" id="stills-dots"></div>
       </div>
     </div>
+  </div>
 
-    <!-- CONTACT -->
-    <div class="page" id="page-contact">
-      <div class="contact-label">Contact</div>
-      <form class="contact-form" onsubmit="handleSubmit(event)">
-        <div class="form-row">
-          <div class="form-field">
-            <label for="f-name">Name</label>
-            <input id="f-name" type="text" autocomplete="name" required>
-          </div>
-          <div class="form-field">
-            <label for="f-email">Email</label>
-            <input id="f-email" type="email" autocomplete="email" required>
-          </div>
+  <!-- ═══ ABOUT ═══ -->
+  <div class="page" id="page-about">
+    <div class="about-img">
+      <!-- Replace with: <img src="portrait.jpg" alt="Yifan Xiao"> -->
+      <span class="about-img-ph">ADD YOUR PORTRAIT HERE</span>
+    </div>
+    <div class="about-content">
+      <div class="about-label">ABOUT</div>
+      <p class="about-bio">Yifan Xiao is a filmmaker and Graduate Film MFA candidate at NYU Tisch. Working across directing and cinematography, his films have screened internationally.</p>
+    </div>
+  </div>
+
+  <!-- ═══ CONTACT ═══ -->
+  <div class="page" id="page-contact">
+    <div class="contact-label">CONTACT</div>
+    <a class="contact-email" href="mailto:xyifanxiao@gmail.com">xyifanxiao@gmail.com</a>
+
+    <!--
+      TO RECEIVE EMAILS:
+      1. Go to formspree.io and create a free account
+      2. Create a new form → copy your Form ID (looks like: xpwzabcd)
+      3. Replace YOUR_FORM_ID below with your actual Form ID
+    -->
+    <form class="contact-form" id="contact-form">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="f-first">FIRST NAME</label>
+          <input id="f-first" name="first_name" type="text" required autocomplete="given-name">
         </div>
         <div class="form-field">
-          <label for="f-subject">Subject</label>
-          <input id="f-subject" type="text">
+          <label for="f-last">LAST NAME</label>
+          <input id="f-last" name="last_name" type="text" required autocomplete="family-name">
         </div>
-        <div class="form-field">
-          <label for="f-message">Message</label>
-          <textarea id="f-message" required></textarea>
-        </div>
-        <button class="form-submit" type="submit">Send</button>
-      </form>
-    </div>
-
-  </main>
+      </div>
+      <div class="form-field">
+        <label for="f-email">EMAIL ADDRESS</label>
+        <input id="f-email" name="email" type="email" required autocomplete="email">
+      </div>
+      <div class="form-field">
+        <label for="f-subject">SUBJECT</label>
+        <input id="f-subject" name="subject" type="text" required>
+      </div>
+      <div class="form-field">
+        <label for="f-message">MESSAGE</label>
+        <textarea id="f-message" name="message" required></textarea>
+      </div>
+      <button class="form-submit" type="submit" id="form-submit-btn">SEND</button>
+      <div class="form-success" id="form-success">Message sent — thank you.</div>
+    </form>
+  </div>
 
   <script>
-    /* ── Replace with your actual Vimeo video ID ── */
-    const VIMEO_ID = 'YOUR_VIMEO_ID';
+    /* ════════════════════════════════
+       CONFIG — replace these values
+    ════════════════════════════════ */
+    const VIMEO_ID    = 'YOUR_VIMEO_ID';
+    const FORMSPREE   = 'YOUR_FORM_ID'; // e.g. 'xpwzabcd'
 
-    /* Film data — add your info for each film */
-    const films = {
-      'endless-sleep':    { title: 'Endless Sleep',     meta: '2024 · Short Film · Director of Photography', desc: 'Add your film description here.' },
-      'speechless':       { title: 'Speechless',         meta: '2024 · Short Film · Director of Photography', desc: 'Add your film description here.' },
-      'deadline':         { title: 'Deadline',           meta: '2024 · Short Film · Director of Photography', desc: 'Add your film description here.' },
-      'recital':          { title: 'Recital',            meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
-      'tacha-skan':       { title: 'Tacha Skan',         meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
-      'personal-message': { title: 'Personal Message',   meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
-      'woksape-wisdom':   { title: 'Woksape: Wisdom',    meta: '2023 · Short Film · Director of Photography', desc: 'Add your film description here.' },
-      'there-is-no-wind': { title: 'There Is No Wind',  meta: '2022 · Short Film · Director of Photography', desc: 'Add your film description here.' },
+    /* ════════════════════════════════
+       FILM DATA
+    ════════════════════════════════ */
+    const FILMS = {
+      'woksape-wisdom':            { title: 'Woksape: Wisdom',           role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: ['','',''] },  // replace '' with image paths e.g. 'images/woksape-1.jpg'
+      'there-is-no-wind':          { title: 'There Is No Wind',          role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: ['','',''] },
+      'tacha-skan':                { title: 'Tacha Skan',                role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: ['','',''] },
+      'personal-message':          { title: 'Personal Message',          role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: ['','',''] },
+      'endless-sleep':             { title: 'Endless Sleep',             role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
+        stills: ['','',''] },
+      'recital':                   { title: 'Recital',                   role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
+        stills: ['','',''] },
+      'deadline':                  { title: 'Deadline',                  role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
+        stills: ['','',''] },
+      'glance':                    { title: 'Glance',                    role: 'DIRECTOR',
+        stills: ['','',''] },
+      'words':                     { title: 'Words',                     role: 'DIRECTOR',
+        stills: ['','',''] },
+      'distant':                   { title: 'Distant',                   role: 'DIRECTOR',
+        stills: ['','',''] },
+      'whispers-of-the-sea':       { title: 'Whispers of the Sea',       role: 'DIRECTOR',
+        stills: ['','',''] },
+      'when-the-earth-turns-blue': { title: 'When the Earth Turns Blue', role: 'DIRECTOR',
+        stills: ['','',''] },
+      'after-the-pass':            { title: 'After the Pass',            role: 'DIRECTOR',
+        stills: ['','',''] },
+      'in-the-painting':           { title: 'In the Painting',           role: 'DIRECTOR',
+        stills: ['','',''] },
     };
 
+    /* ════════════════════════════════
+       PAGE NAVIGATION
+    ════════════════════════════════ */
     function showPage(name) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
-      document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active', 'fade-in');
+      });
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
       const page = document.getElementById('page-' + name);
       if (!page) return;
       page.classList.add('active');
       void page.offsetWidth;
       page.classList.add('fade-in');
+
       const btn = document.getElementById('nav-' + name);
       if (btn) btn.classList.add('active');
-      window.scrollTo(0, 0);
+
+      // Scroll to top of the page
+      page.scrollTop = 0;
+
+      // Close dropdown
+      filmsDrop.classList.remove('open');
     }
 
+    /* ════════════════════════════════
+       INDIVIDUAL FILM PAGE
+    ════════════════════════════════ */
+    let currentStillIdx = 0;
+    let currentStills   = [];
+
     function showFilm(slug) {
-      const film = films[slug];
+      const film = FILMS[slug];
       if (!film) return;
-      document.getElementById('film-page-title').textContent = film.title;
-      document.getElementById('film-page-meta').textContent = film.meta;
-      document.getElementById('film-page-desc').textContent = film.desc;
+
+      document.getElementById('film-name').textContent = film.title;
+      document.getElementById('film-role').textContent = film.role;
+
+      // Build stills carousel
+      currentStills   = film.stills;
+      currentStillIdx = 0;
+      const track = document.getElementById('stills-track');
+      const dots  = document.getElementById('stills-dots');
+      track.innerHTML = '';
+      dots.innerHTML  = '';
+
+      currentStills.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'still-slide' + (i === 0 ? ' active' : '');
+        if (src) {
+          slide.innerHTML = `<img src="${src}" alt="${film.title} still ${i+1}">`;
+        } else {
+          slide.innerHTML = `<div class="still-ph">ADD YOUR STILL HERE</div>`;
+        }
+        track.appendChild(slide);
+
+        const dot = document.createElement('button');
+        dot.className = 'stills-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToStill(i);
+        dots.appendChild(dot);
+      });
+
+      // Hide arrows if only 1 still
+      const showArrows = currentStills.length > 1;
+      document.getElementById('still-prev').style.display = showArrows ? '' : 'none';
+      document.getElementById('still-next').style.display = showArrows ? '' : 'none';
+      dots.style.display = showArrows ? '' : 'none';
+
+      // Navigate to film page
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
-      document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       const page = document.getElementById('page-film');
       page.classList.add('active');
       void page.offsetWidth;
       page.classList.add('fade-in');
       document.getElementById('nav-films').classList.add('active');
-      window.scrollTo(0, 0);
+      page.scrollTop = 0;
+
+      filmsDrop.classList.remove('open');
     }
 
+    function goToStill(idx) {
+      const slides = document.querySelectorAll('.still-slide');
+      const dots   = document.querySelectorAll('.stills-dot');
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      currentStillIdx = (idx + slides.length) % slides.length;
+      slides[currentStillIdx].classList.add('active');
+      dots[currentStillIdx].classList.add('active');
+    }
+
+    function moveStill(dir) { goToStill(currentStillIdx + dir); }
+
+    /* ════════════════════════════════
+       FILMS TAB TOGGLE
+    ════════════════════════════════ */
+    function switchTab(tab) {
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.film-grid').forEach(g => g.classList.remove('active'));
+      document.getElementById('toggle-' + tab).classList.add('active');
+      document.getElementById('grid-'   + tab).classList.add('active');
+    }
+
+    /* ════════════════════════════════
+       FILMS DROPDOWN — hover with delay
+    ════════════════════════════════ */
+    const filmsNav  = document.getElementById('films-nav');
+    const filmsDrop = document.getElementById('films-drop');
+    let dropTimer;
+
+    filmsNav.addEventListener('mouseenter', () => {
+      clearTimeout(dropTimer);
+      filmsDrop.classList.add('open');
+    });
+
+    filmsNav.addEventListener('mouseleave', () => {
+      dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 180);
+    });
+
+    filmsDrop.addEventListener('mouseenter', () => clearTimeout(dropTimer));
+    filmsDrop.addEventListener('mouseleave', () => {
+      dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 180);
+    });
+
+    /* ════════════════════════════════
+       HOME SLIDESHOW
+    ════════════════════════════════ */
+    let slideIdx = 0;
+    let slideTimer;
+
+    function goToSlide(idx) {
+      const slides = document.querySelectorAll('#home-slideshow .slide');
+      slides.forEach(s => s.classList.remove('active'));
+      slideIdx = (idx + slides.length) % slides.length;
+      slides[slideIdx].classList.add('active');
+    }
+
+    function moveSlide(dir) {
+      goToSlide(slideIdx + dir);
+      resetSlideTimer();
+    }
+
+    function resetSlideTimer() {
+      clearInterval(slideTimer);
+      slideTimer = setInterval(() => goToSlide(slideIdx + 1), 10000);
+    }
+
+    resetSlideTimer();
+
+    /* ════════════════════════════════
+       REEL
+    ════════════════════════════════ */
     function loadReel() {
       if (VIMEO_ID === 'YOUR_VIMEO_ID') {
-        alert('Replace YOUR_VIMEO_ID in the HTML with your Vimeo video ID.');
+        alert('Replace YOUR_VIMEO_ID in the code with your Vimeo video ID.');
         return;
       }
       const overlay = document.getElementById('play-overlay');
       if (overlay) overlay.remove();
       const iframe = document.createElement('iframe');
-      iframe.src = 'https://player.vimeo.com/video/' + VIMEO_ID + '?autoplay=1&title=0&byline=0&portrait=0';
+      iframe.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&title=0&byline=0&portrait=0`;
       iframe.allow = 'autoplay; fullscreen';
       iframe.allowFullscreen = true;
       document.getElementById('reel-wrap').appendChild(iframe);
     }
 
-    function handleSubmit(e) {
+    /* ════════════════════════════════
+       CONTACT FORM — Formspree
+    ════════════════════════════════ */
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('f-name').value;
-      const email = document.getElementById('f-email').value;
-      const subject = document.getElementById('f-subject').value;
-      const message = document.getElementById('f-message').value;
-      /* To receive messages, replace this with a form service like Formspree:
-         Action: <form action="https://formspree.io/f/YOUR_ID" method="POST">
-         Then remove this onsubmit handler and the script below */
-      window.location.href = `mailto:yifan@yifanxiao.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
-    }
-  </script>
+      const btn     = document.getElementById('form-submit-btn');
+      const success = document.getElementById('form-success');
+      btn.textContent = 'SENDING...';
+      btn.disabled = true;
 
+      const formData = new FormData(e.target);
+
+      try {
+        if (FORMSPREE === 'YOUR_FORM_ID') {
+          // Fallback: open email client if Formspree not set up yet
+          const first   = formData.get('first_name');
+          const last    = formData.get('last_name');
+          const email   = formData.get('email');
+          const subject = formData.get('subject');
+          const message = formData.get('message');
+          window.location.href = `mailto:xyifanxiao@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: ' + first + ' ' + last + '\nEmail: ' + email + '\n\n' + message)}`;
+          btn.textContent = 'SEND';
+          btn.disabled = false;
+          return;
+        }
+
+        const res = await fetch(`https://formspree.io/f/${FORMSPREE}`, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          e.target.reset();
+          btn.style.display = 'none';
+          success.style.display = 'block';
+        } else {
+          btn.textContent = 'SEND';
+          btn.disabled = false;
+          alert('Something went wrong. Please try again.');
+        }
+      } catch (err) {
+        btn.textContent = 'SEND';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  </script>
 </body>
 </html>
