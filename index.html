@@ -17,7 +17,6 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* 修改：引入动态视口高度 (dvh) 解决手机端被浏览器工具栏遮挡的问题 */
     html, body { height: 100vh; height: 100dvh; overflow: hidden; }
 
     body {
@@ -685,7 +684,6 @@
     ═══════════════════════════════ */
     @media (max-width: 640px) {
 
-      /* Header */
       header {
         padding: 0 18px;
         background: rgba(9,9,8,0.80);
@@ -767,13 +765,13 @@
       .slide-arrow { display: none; }
       .still-arrow { display: none; }
 
-      /* 修改：调整 home dots 样式，安全避开浏览器底部黑边 */
+      /* 修改：Home dots 样式完全统一，位置安全上调 */
       .home-dots {
         display: flex !important;
         justify-content: center;
-        gap: 8px; /* 略微加宽间距更易点击 */
+        gap: 8px;
         position: absolute;
-        bottom: 45px; /* 安全地向上移动，避开iOS底部横条 */
+        bottom: 24dvh; /* 贴近画面底部的位置 */
         left: 0; right: 0;
         z-index: 50;
         pointer-events: none;
@@ -782,21 +780,21 @@
       }
 
       .home-dot {
-        width: 6px; height: 6px; /* 略微放大圆点尺寸 */
+        width: 4px; height: 4px; /* 尺寸完全匹配电影剧照点 */
         border-radius: 50%;
-        background: rgba(255,255,255,0.35);
-        transition: background 0.25s, transform 0.2s;
+        background: var(--dim); /* 颜色完全匹配 */
+        transition: background 0.2s;
         border: none;
         padding: 0;
         pointer-events: all;
         cursor: pointer;
         flex-shrink: 0;
-        box-shadow: 0 0 4px rgba(0,0,0,0.6); /* 加深阴影便于在亮图上看清 */
+        box-shadow: none; /* 去除额外阴影 */
       }
 
       .home-dot.active {
-        background: rgba(255,255,255,0.95);
-        transform: scale(1.2); /* 激活时略微放大 */
+        background: var(--text);
+        transform: none; /* 取消放大动画，保持统一 */
       }
 
       #page-films { padding-bottom: 160px; }
@@ -812,7 +810,6 @@
 
       .film-page-inner { padding: 28px 18px 60px; }
 
-      /* Stills: sliding animation on mobile */
       .stills-track { overflow: hidden; min-height: 0; }
       .stills-track-inner {
         display: flex;
@@ -1258,7 +1255,6 @@
       page.scrollTop = 0;
       if(typeof filmsDrop !== 'undefined' && filmsDrop) filmsDrop.classList.remove('open');
       
-      // Dispatch event to re-sync mobile slider track position
       document.dispatchEvent(new Event('filmLoaded'));
     }
 
@@ -1307,7 +1303,6 @@
     let slideIdx = 0;
     let slideTimer;
 
-    // Build home dots
     (function buildHomeDots() {
       const slides = document.querySelectorAll('#home-slideshow .slide');
       const container = document.getElementById('home-dots');
@@ -1345,14 +1340,118 @@
 
     resetSlideTimer();
 
-    // Swipe on home slideshow (mobile)
+    /* 修改：首页原生拖拽滑动算法 (仅手机生效，兼顾叠画) */
     (function() {
       const el = document.getElementById('home-slideshow');
-      let tx = 0;
-      el.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+      const slides = document.querySelectorAll('#home-slideshow .slide');
+      let tx = 0, dragging = false, dragOffset = 0, w = window.innerWidth;
+      let swiping = false;
+
+      const isMobile = () => window.innerWidth <= 640;
+
+      el.addEventListener('touchstart', e => {
+        if (!isMobile() || slides.length < 2) return;
+        clearInterval(slideTimer); 
+        tx = e.touches[0].clientX;
+        dragging = true;
+        dragOffset = 0;
+        swiping = false;
+        w = el.offsetWidth;
+
+        const n = slides.length;
+        const prev = (slideIdx - 1 + n) % n;
+        const next = (slideIdx + 1) % n;
+
+        slides.forEach((s, i) => {
+          s.style.transition = 'none';
+          if (i === slideIdx) {
+            s.style.opacity = '1';
+            s.style.transform = `translateX(0px)`;
+            s.style.zIndex = '5';
+          } else if (i === prev) {
+            s.style.opacity = '1';
+            s.style.transform = `translateX(${-w}px)`;
+            s.style.zIndex = '4';
+          } else if (i === next) {
+            s.style.opacity = '1';
+            s.style.transform = `translateX(${w}px)`;
+            s.style.zIndex = '4';
+          } else {
+            s.style.opacity = '0';
+            s.style.zIndex = '1';
+          }
+        });
+      }, { passive: true });
+
+      el.addEventListener('touchmove', e => {
+        if (!dragging || !isMobile()) return;
+        dragOffset = e.touches[0].clientX - tx;
+        swiping = true;
+
+        const n = slides.length;
+        const prev = (slideIdx - 1 + n) % n;
+        const next = (slideIdx + 1) % n;
+
+        slides[slideIdx].style.transform = `translateX(${dragOffset}px)`;
+        slides[prev].style.transform = `translateX(${-w + dragOffset}px)`;
+        slides[next].style.transform = `translateX(${w + dragOffset}px)`;
+      }, { passive: true });
+
       el.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - tx;
-        if (Math.abs(dx) > 45) { moveSlide(dx < 0 ? 1 : -1); }
+        if (!dragging || !isMobile()) return;
+        dragging = false;
+
+        if (!swiping) {
+          resetSlideTimer();
+          return;
+        }
+
+        const dx = dragOffset;
+        const n = slides.length;
+        let targetIdx = slideIdx;
+        let finalOffset = 0;
+
+        if (dx < -45) {
+          targetIdx = (slideIdx + 1) % n;
+          finalOffset = -w;
+        } else if (dx > 45) {
+          targetIdx = (slideIdx - 1 + n) % n;
+          finalOffset = w;
+        }
+
+        const prev = (slideIdx - 1 + n) % n;
+        const next = (slideIdx + 1) % n;
+
+        const time = 0.35;
+        slides[slideIdx].style.transition = `transform ${time}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        slides[prev].style.transition = `transform ${time}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        slides[next].style.transition = `transform ${time}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+
+        slides[slideIdx].style.transform = `translateX(${finalOffset}px)`;
+        slides[prev].style.transform = `translateX(${-w + finalOffset}px)`;
+        slides[next].style.transform = `translateX(${w + finalOffset}px)`;
+
+        slideIdx = targetIdx;
+        updateHomeDots();
+
+        // 动画结束后，无缝重置CSS以恢复10秒叠画
+        setTimeout(() => {
+          slides.forEach((s, i) => {
+            s.style.transition = 'none'; 
+            s.style.transform = '';
+            s.style.opacity = '';
+            s.style.zIndex = '';
+            if (i === slideIdx) {
+              s.classList.add('active');
+            } else {
+              s.classList.remove('active');
+            }
+          });
+          void slides[0].offsetHeight; // force reflow
+          slides.forEach(s => s.style.transition = '');
+          resetSlideTimer();
+        }, time * 1000);
+
       }, { passive: true });
     })();
 
@@ -1381,7 +1480,7 @@
 
       function goToStillMobile(idx) {
         if (!isMobile()) { _goToStill(idx); return; }
-        if (wrapTimeout) return; // Prevent breaking animation if swiping wildly
+        if (wrapTimeout) return; 
 
         const slides = document.querySelectorAll('#stills-track-inner .still-slide');
         const dots   = document.querySelectorAll('.stills-dot');
@@ -1390,49 +1489,45 @@
 
         const targetIdx = ((idx % n) + n) % n;
 
-        // Detect if we are wrapping around the edges
         const isNextWrap = (stillIdx === n - 1 && idx >= n);
         const isPrevWrap = (stillIdx === 0 && idx < 0);
 
-        // Update dot highlight immediately
         slides.forEach(s => s.classList.remove('active'));
         dots.forEach(d => d.classList.remove('active'));
         stillIdx = targetIdx;
         slides[stillIdx].classList.add('active');
         if (dots[stillIdx]) dots[stillIdx].classList.add('active');
 
-        // Execute Seamless True Loop
+        /* 修改：剧照底层的真正无缝物理循环算法 */
         if (isNextWrap) {
-          const clone = slides[0].cloneNode(true); // Clone first image
-          inner.appendChild(clone); // Put it at the very end
-          setTranslate(-n * getSlideWidth(), true); // Slide to the clone
+          const clone = slides[0].cloneNode(true); 
+          inner.appendChild(clone); 
+          setTranslate(-n * getSlideWidth(), true); 
           
           wrapTimeout = setTimeout(() => {
-            inner.removeChild(clone); // Delete clone secretly
-            setTranslate(0, false); // Instantly snap back to real first image
+            inner.removeChild(clone); 
+            setTranslate(0, false); 
             wrapTimeout = null;
           }, 350);
           
         } else if (isPrevWrap) {
-          const clone = slides[n - 1].cloneNode(true); // Clone last image
-          inner.insertBefore(clone, slides[0]); // Put it at the very beginning
-          setTranslate(-1 * getSlideWidth(), false); // Instantly shift view so we still see first image
-          void inner.offsetWidth; // Force browser layout recalculation
-          setTranslate(0, true); // Slide back to see the clone (which is at position 0)
+          const clone = slides[n - 1].cloneNode(true); 
+          inner.insertBefore(clone, slides[0]); 
+          setTranslate(-1 * getSlideWidth(), false); 
+          void inner.offsetWidth; 
+          setTranslate(0, true); 
 
           wrapTimeout = setTimeout(() => {
-            inner.removeChild(clone); // Delete clone secretly
-            setTranslate(-(n - 1) * getSlideWidth(), false); // Instantly snap to real last image
+            inner.removeChild(clone); 
+            setTranslate(-(n - 1) * getSlideWidth(), false); 
             wrapTimeout = null;
           }, 350);
           
         } else {
-          // Normal slide
           syncTranslate(true);
         }
       }
 
-      // Attach function globally so moveStill() can use it
       window.goToStillPatched = goToStillMobile;
 
       track.addEventListener('touchstart', e => {
@@ -1456,11 +1551,10 @@
         if (Math.abs(dx) > 45) {
           goToStillMobile(stillIdx + (dx < 0 ? 1 : -1));
         } else {
-          syncTranslate(true); // user didn't swipe far enough, snap back
+          syncTranslate(true); 
         }
       }, { passive: true });
 
-      // Clean reset when clicking into a new movie
       document.addEventListener('filmLoaded', () => {
         if (isMobile()) {
           inner.style.transition = 'none';
