@@ -16,7 +16,9 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; overflow: hidden; }
+    
+    /* 修改：引入动态视口高度 (dvh) 解决手机端被浏览器工具栏遮挡的问题 */
+    html, body { height: 100vh; height: 100dvh; overflow: hidden; }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -163,7 +165,7 @@
     /* ═══════════════════════════════
        HOME — fullscreen slideshow
     ═══════════════════════════════ */
-    #page-home { height: 100vh; }
+    #page-home { height: 100vh; height: 100dvh; }
 
     .slideshow {
       position: relative;
@@ -690,7 +692,6 @@
         backdrop-filter: blur(8px);
       }
 
-      /* Logo: single row, no wrap */
       .logo { flex-direction: column; gap: 4px; }
       .logo-name {
         font-size: 12.5px;
@@ -703,7 +704,6 @@
         display: block;
       }
 
-      /* Hide desktop nav, show hamburger */
       nav { display: none; }
 
       .hamburger {
@@ -727,7 +727,6 @@
         border-radius: 1px;
       }
 
-      /* Mobile menu overlay */
       .mobile-menu {
         position: fixed;
         inset: 0;
@@ -760,74 +759,61 @@
       .mobile-menu-btn:hover,
       .mobile-menu-btn:active { color: #fff; }
 
-      /* Home: full image visible, letterbox OK, shifted up slightly */
       .slide img {
         object-fit: contain;
         object-position: center 40%;
       }
 
-      /* Hide arrows on mobile — swipe instead */
       .slide-arrow { display: none; }
       .still-arrow { display: none; }
 
-      /* Home dots — visible mobile only, above bottom edge */
+      /* 修改：调整 home dots 样式，安全避开浏览器底部黑边 */
       .home-dots {
         display: flex !important;
         justify-content: center;
-        gap: 6px;
+        gap: 8px; /* 略微加宽间距更易点击 */
         position: absolute;
-        bottom: 24px;
+        bottom: 45px; /* 安全地向上移动，避开iOS底部横条 */
         left: 0; right: 0;
-        z-index: 20;
+        z-index: 50;
         pointer-events: none;
         flex-wrap: wrap;
         padding: 0 20px;
       }
 
       .home-dot {
-        width: 5px; height: 5px;
+        width: 6px; height: 6px; /* 略微放大圆点尺寸 */
         border-radius: 50%;
-        background: rgba(255,255,255,0.3);
-        transition: background 0.25s;
+        background: rgba(255,255,255,0.35);
+        transition: background 0.25s, transform 0.2s;
         border: none;
         padding: 0;
         pointer-events: all;
         cursor: pointer;
         flex-shrink: 0;
-        box-shadow: 0 0 3px rgba(0,0,0,0.5);
+        box-shadow: 0 0 4px rgba(0,0,0,0.6); /* 加深阴影便于在亮图上看清 */
       }
 
       .home-dot.active {
         background: rgba(255,255,255,0.95);
+        transform: scale(1.2); /* 激活时略微放大 */
       }
 
-      /* Films page: reliable bottom space for both tabs */
       #page-films { padding-bottom: 160px; }
-      .film-grid {
-        padding-bottom: 0;
-      }
-      .film-grid.active {
-        grid-template-columns: 1fr 1fr;
-      }
+      .film-grid { padding-bottom: 0; }
+      .film-grid.active { grid-template-columns: 1fr 1fr; }
 
-      /* Film card title: pushed to true bottom-left */
       .film-card-overlay {
         padding: 10px 12px;
         align-items: flex-end;
         background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%);
       }
-      .film-card-title {
-        font-size: 11px;
-      }
+      .film-card-title { font-size: 11px; }
 
-      /* Film individual page */
       .film-page-inner { padding: 28px 18px 60px; }
 
       /* Stills: sliding animation on mobile */
-      .stills-track {
-        overflow: hidden;
-        min-height: 0;
-      }
+      .stills-track { overflow: hidden; min-height: 0; }
       .stills-track-inner {
         display: flex;
         transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -838,18 +824,14 @@
         flex-shrink: 0;
         width: 100%;
       }
-      .still-slide img {
-        max-height: 55vh;
-      }
+      .still-slide img { max-height: 55vh; }
 
-      /* Contact: top-align and lots of bottom room */
       #page-contact {
         padding: 40px 18px 160px;
         justify-content: flex-start;
       }
       .form-row { grid-template-columns: 1fr; gap: 24px; }
 
-      /* About */
       #page-about.active {
         flex-direction: column;
         padding: 32px 18px 130px;
@@ -859,7 +841,6 @@
       .about-portrait-wrap { width: 52%; max-width: none; }
       .about-bio { text-align: left; }
 
-      /* Films header */
       .films-header { padding: 24px 18px 18px; }
     }
   </style>
@@ -891,13 +872,11 @@
       <button class="nav-btn" id="nav-about"   onclick="showPage('about')">ABOUT</button>
       <button class="nav-btn" id="nav-contact" onclick="showPage('contact')">CONTACT</button>
     </nav>
-    <!-- Hamburger — mobile only -->
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </header>
 
-  <!-- Mobile menu overlay -->
   <div class="mobile-menu" id="mobile-menu">
     <button class="mobile-menu-btn" onclick="mobileNav('home')">HOME</button>
     <button class="mobile-menu-btn" onclick="mobileNav('reel')">REEL</button>
@@ -1154,15 +1133,13 @@
     /* ══════════════════════════════
        PAGE NAVIGATION
     ══════════════════════════════ */
-    let filmsScrollPos = 0; // remember scroll position in films page
+    let filmsScrollPos = 0;
 
     function showPage(name) {
-      // Save films scroll position before leaving
       const filmsPage = document.getElementById('page-films');
       if (filmsPage.classList.contains('active')) {
         filmsScrollPos = filmsPage.scrollTop;
       }
-
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       const page = document.getElementById('page-' + name);
@@ -1173,10 +1150,9 @@
       const btn = document.getElementById('nav-' + name);
       if (btn) btn.classList.add('active');
       page.scrollTop = 0;
-      if (filmsDrop) filmsDrop.classList.remove('open');
+      if (typeof filmsDrop !== 'undefined' && filmsDrop) filmsDrop.classList.remove('open');
     }
 
-    // Go back to films and restore scroll position
     function backToFilms() {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -1186,40 +1162,44 @@
       page.classList.add('fade-in');
       const btn = document.getElementById('nav-films');
       if (btn) btn.classList.add('active');
-      // Restore scroll after paint
       requestAnimationFrame(() => { page.scrollTop = filmsScrollPos; });
-      if (filmsDrop) filmsDrop.classList.remove('open');
+      if (typeof filmsDrop !== 'undefined' && filmsDrop) filmsDrop.classList.remove('open');
     }
 
     /* ══════════════════════════════
        HAMBURGER MENU (mobile)
     ══════════════════════════════ */
     function toggleMenu() {
-      const menu = document.getElementById('mobile-menu');
-      menu.classList.toggle('open');
+      document.getElementById('mobile-menu').classList.toggle('open');
     }
 
     function mobileNav(name) {
       document.getElementById('mobile-menu').classList.remove('open');
-      // On mobile, Films goes directly to films page (no dropdown)
       showPage(name);
-      if (name === 'films') {
-        // Always reset to cinematography tab on fresh visit
-        switchTab('cinema');
-      }
+      if (name === 'films') switchTab('cinema');
     }
 
     /* ══════════════════════════════
-       INDIVIDUAL FILM
+       INDIVIDUAL FILM (Setup Desktop Only Logic Here)
     ══════════════════════════════ */
     let stillIdx = 0;
     let stillCount = 0;
+
+    // Desktop smooth jump
+    const _goToStill = function(idx) {
+      const slides = document.querySelectorAll('#stills-track-inner .still-slide');
+      const dots   = document.querySelectorAll('.stills-dot');
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      stillIdx = (idx + slides.length) % slides.length;
+      if(slides[stillIdx]) slides[stillIdx].classList.add('active');
+      if (dots[stillIdx]) dots[stillIdx].classList.add('active');
+    };
 
     function showFilm(slug) {
       const film = FILMS[slug];
       if (!film) return;
 
-      // Save films scroll position
       const filmsPage = document.getElementById('page-films');
       if (filmsPage.classList.contains('active')) {
         filmsScrollPos = filmsPage.scrollTop;
@@ -1256,7 +1236,7 @@
             if (window.goToStillPatched && window.innerWidth <= 640) {
               window.goToStillPatched(i);
             } else {
-              goToStill(i);
+              _goToStill(i);
             }
           };
           dots.appendChild(dot);
@@ -1276,28 +1256,17 @@
       page.classList.add('fade-in');
       document.getElementById('nav-films').classList.add('active');
       page.scrollTop = 0;
-      filmsDrop.classList.remove('open');
-      // Reset stills track position for mobile sliding
-      const inner2 = document.getElementById('stills-track-inner');
-      if (inner2) { inner2.style.transition = 'none'; inner2.style.transform = 'translateX(0)'; }
+      if(typeof filmsDrop !== 'undefined' && filmsDrop) filmsDrop.classList.remove('open');
+      
+      // Dispatch event to re-sync mobile slider track position
       document.dispatchEvent(new Event('filmLoaded'));
-    }
-
-    function goToStill(idx) {
-      const slides = document.querySelectorAll('#stills-track-inner .still-slide');
-      const dots   = document.querySelectorAll('.stills-dot');
-      slides.forEach(s => s.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-      stillIdx = (idx + slides.length) % slides.length;
-      slides[stillIdx].classList.add('active');
-      if (dots[stillIdx]) dots[stillIdx].classList.add('active');
     }
 
     function moveStill(dir) {
       if (window.goToStillPatched && window.innerWidth <= 640) {
         window.goToStillPatched(stillIdx + dir);
       } else {
-        goToStill(stillIdx + dir);
+        _goToStill(stillIdx + dir);
       }
     }
 
@@ -1312,13 +1281,12 @@
     }
 
     /* ══════════════════════════════
-       FILMS DROPDOWN
+       FILMS DROPDOWN (Desktop Hover)
     ══════════════════════════════ */
     const filmsNav  = document.getElementById('films-nav');
     const filmsDrop = document.getElementById('films-drop');
     let dropTimer;
 
-    // Only enable hover dropdown on non-touch devices
     if (window.matchMedia('(hover: hover)').matches) {
       filmsNav.addEventListener('mouseenter', () => {
         clearTimeout(dropTimer);
@@ -1334,19 +1302,18 @@
     }
 
     /* ══════════════════════════════
-       HOME SLIDESHOW — dots + swipe
+       HOME SLIDESHOW (With Dots)
     ══════════════════════════════ */
     let slideIdx = 0;
     let slideTimer;
 
-    // Build home dots once
+    // Build home dots
     (function buildHomeDots() {
       const slides = document.querySelectorAll('#home-slideshow .slide');
       const container = document.getElementById('home-dots');
       slides.forEach((_, i) => {
         const d = document.createElement('button');
         d.className = 'home-dot' + (i === 0 ? ' active' : '');
-        d.setAttribute('aria-label', 'Slide ' + (i + 1));
         d.onclick = () => { goToSlide(i); resetSlideTimer(); };
         container.appendChild(d);
       });
@@ -1389,18 +1356,21 @@
       }, { passive: true });
     })();
 
-    // Swipe on film stills (mobile) — smooth sliding
+    /* ══════════════════════════════
+       MOBILE TRUE LOOP STILLS SWIPE
+    ══════════════════════════════ */
     (function() {
       const track = document.getElementById('stills-track');
       const inner = document.getElementById('stills-track-inner');
       let tx = 0, dragging = false, dragOffset = 0;
+      let wrapTimeout = null;
       const isMobile = () => window.innerWidth <= 640;
 
       function getSlideWidth() { return track.getBoundingClientRect().width; }
 
       function setTranslate(px, animated) {
         inner.style.transition = animated
-          ? 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)'
+          ? 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           : 'none';
         inner.style.transform = `translateX(${px}px)`;
       }
@@ -1409,44 +1379,64 @@
         setTranslate(-stillIdx * getSlideWidth(), animated);
       }
 
-      // Override goToStill on mobile to use translate
-      const _goToStill = goToStill;
       function goToStillMobile(idx) {
         if (!isMobile()) { _goToStill(idx); return; }
+        if (wrapTimeout) return; // Prevent breaking animation if swiping wildly
+
         const slides = document.querySelectorAll('#stills-track-inner .still-slide');
         const dots   = document.querySelectorAll('.stills-dot');
         const n = slides.length;
+        if (n === 0) return;
+
         const targetIdx = ((idx % n) + n) % n;
 
-        const isWrapping = (stillIdx === n - 1 && idx >= n) ||
-                           (stillIdx === 0 && idx < 0);
+        // Detect if we are wrapping around the edges
+        const isNextWrap = (stillIdx === n - 1 && idx >= n);
+        const isPrevWrap = (stillIdx === 0 && idx < 0);
 
-        // Update active class + dots
+        // Update dot highlight immediately
         slides.forEach(s => s.classList.remove('active'));
         dots.forEach(d => d.classList.remove('active'));
         stillIdx = targetIdx;
         slides[stillIdx].classList.add('active');
         if (dots[stillIdx]) dots[stillIdx].classList.add('active');
 
-        if (isWrapping) {
-          // Fade out → jump → fade in (no slide-through)
-          inner.style.transition = 'opacity 0.18s ease';
-          inner.style.opacity = '0';
-          setTimeout(() => {
-            inner.style.transition = 'none';
-            inner.style.transform = `translateX(${-stillIdx * getSlideWidth()}px)`;
-            inner.style.opacity = '1';
-          }, 180);
+        // Execute Seamless True Loop
+        if (isNextWrap) {
+          const clone = slides[0].cloneNode(true); // Clone first image
+          inner.appendChild(clone); // Put it at the very end
+          setTranslate(-n * getSlideWidth(), true); // Slide to the clone
+          
+          wrapTimeout = setTimeout(() => {
+            inner.removeChild(clone); // Delete clone secretly
+            setTranslate(0, false); // Instantly snap back to real first image
+            wrapTimeout = null;
+          }, 350);
+          
+        } else if (isPrevWrap) {
+          const clone = slides[n - 1].cloneNode(true); // Clone last image
+          inner.insertBefore(clone, slides[0]); // Put it at the very beginning
+          setTranslate(-1 * getSlideWidth(), false); // Instantly shift view so we still see first image
+          void inner.offsetWidth; // Force browser layout recalculation
+          setTranslate(0, true); // Slide back to see the clone (which is at position 0)
+
+          wrapTimeout = setTimeout(() => {
+            inner.removeChild(clone); // Delete clone secretly
+            setTranslate(-(n - 1) * getSlideWidth(), false); // Instantly snap to real last image
+            wrapTimeout = null;
+          }, 350);
+          
         } else {
+          // Normal slide
           syncTranslate(true);
         }
       }
 
-      // Patch global goToStill
+      // Attach function globally so moveStill() can use it
       window.goToStillPatched = goToStillMobile;
 
       track.addEventListener('touchstart', e => {
-        if (!isMobile()) return;
+        if (!isMobile() || wrapTimeout) return;
         tx = e.touches[0].clientX;
         dragging = true;
         dragOffset = 0;
@@ -1454,31 +1444,34 @@
       }, { passive: true });
 
       track.addEventListener('touchmove', e => {
-        if (!isMobile() || !dragging) return;
+        if (!isMobile() || !dragging || wrapTimeout) return;
         dragOffset = e.touches[0].clientX - tx;
         setTranslate(-stillIdx * getSlideWidth() + dragOffset, false);
       }, { passive: true });
 
       track.addEventListener('touchend', e => {
-        if (!isMobile() || !dragging) return;
+        if (!isMobile() || !dragging || wrapTimeout) return;
         dragging = false;
         const dx = e.changedTouches[0].clientX - tx;
         if (Math.abs(dx) > 45) {
           goToStillMobile(stillIdx + (dx < 0 ? 1 : -1));
         } else {
-          syncTranslate(true); // snap back
+          syncTranslate(true); // user didn't swipe far enough, snap back
         }
       }, { passive: true });
 
-      // Re-sync position when a new film is loaded
-      const _showFilm = window.showFilmOrig || null;
+      // Clean reset when clicking into a new movie
       document.addEventListener('filmLoaded', () => {
-        if (isMobile()) { inner.style.transition = 'none'; inner.style.transform = 'translateX(0)'; }
+        if (isMobile()) {
+          inner.style.transition = 'none';
+          inner.style.transform = 'translateX(0)';
+          wrapTimeout = null;
+        }
       });
     })();
 
     /* ══════════════════════════════
-       REEL
+       REEL & CONTACT FORM
     ══════════════════════════════ */
     function loadReel() {
       if (VIMEO_ID === 'YOUR_VIMEO_ID') {
@@ -1494,9 +1487,6 @@
       document.getElementById('reel-wrap').appendChild(iframe);
     }
 
-    /* ══════════════════════════════
-       CONTACT FORM
-    ══════════════════════════════ */
     document.getElementById('contact-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn     = document.getElementById('form-submit-btn');
