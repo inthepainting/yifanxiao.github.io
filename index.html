@@ -673,7 +673,10 @@
     /* Hamburger hidden on desktop */
     .hamburger { display: none; }
     .mobile-menu { display: none; }
-    .home-dots { display: none; }
+
+    @media (min-width: 641px) {
+      .home-dots { display: none !important; }
+    }
 
     /* ═══════════════════════════════
        MOBILE — all fixes
@@ -769,28 +772,34 @@
 
       /* Home dots — visible mobile only, above bottom edge */
       .home-dots {
-        display: flex;
+        display: flex !important;
         justify-content: center;
-        gap: 7px;
+        gap: 6px;
         position: absolute;
-        bottom: 28px;
+        bottom: 24px;
         left: 0; right: 0;
         z-index: 20;
         pointer-events: none;
+        flex-wrap: wrap;
+        padding: 0 20px;
       }
 
       .home-dot {
-        width: 4px; height: 4px;
+        width: 5px; height: 5px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.35);
+        background: rgba(255,255,255,0.3);
         transition: background 0.25s;
         border: none;
         padding: 0;
         pointer-events: all;
         cursor: pointer;
+        flex-shrink: 0;
+        box-shadow: 0 0 3px rgba(0,0,0,0.5);
       }
 
-      .home-dot.active { background: rgba(255,255,255,0.9); }
+      .home-dot.active {
+        background: rgba(255,255,255,0.95);
+      }
 
       /* Films page: reliable bottom space for both tabs */
       #page-films { padding-bottom: 160px; }
@@ -843,7 +852,7 @@
       /* About */
       #page-about.active {
         flex-direction: column;
-        padding: 32px 18px 100px;
+        padding: 32px 18px 130px;
         gap: 28px;
         align-items: flex-start;
       }
@@ -1406,12 +1415,31 @@
         if (!isMobile()) { _goToStill(idx); return; }
         const slides = document.querySelectorAll('#stills-track-inner .still-slide');
         const dots   = document.querySelectorAll('.stills-dot');
+        const n = slides.length;
+        const targetIdx = ((idx % n) + n) % n;
+
+        const isWrapping = (stillIdx === n - 1 && idx >= n) ||
+                           (stillIdx === 0 && idx < 0);
+
+        // Update active class + dots
         slides.forEach(s => s.classList.remove('active'));
         dots.forEach(d => d.classList.remove('active'));
-        stillIdx = (idx + slides.length) % slides.length;
+        stillIdx = targetIdx;
         slides[stillIdx].classList.add('active');
         if (dots[stillIdx]) dots[stillIdx].classList.add('active');
-        syncTranslate(true);
+
+        if (isWrapping) {
+          // Fade out → jump → fade in (no slide-through)
+          inner.style.transition = 'opacity 0.18s ease';
+          inner.style.opacity = '0';
+          setTimeout(() => {
+            inner.style.transition = 'none';
+            inner.style.transform = `translateX(${-stillIdx * getSlideWidth()}px)`;
+            inner.style.opacity = '1';
+          }, 180);
+        } else {
+          syncTranslate(true);
+        }
       }
 
       // Patch global goToStill
