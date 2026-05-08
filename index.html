@@ -26,7 +26,7 @@
     }
 
     /* ═══════════════════════════════
-       HEADER — Transparent & Bold
+       HEADER — transparent, always fixed
     ═══════════════════════════════ */
     header {
       position: fixed;
@@ -38,19 +38,17 @@
       justify-content: space-between;
       padding: 0 48px;
       background: transparent;
-      pointer-events: none;
     }
 
     .logo {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
       cursor: pointer;
-      pointer-events: auto;
     }
 
     .logo-name {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
       letter-spacing: 0.22em;
       color: #ffffff;
@@ -68,12 +66,11 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
+    /* NAV */
     nav {
       display: flex;
       align-items: center;
       gap: 36px;
-      pointer-events: auto;
-      height: 100%;
     }
 
     .nav-btn {
@@ -88,30 +85,35 @@
       cursor: pointer;
       padding: 0;
       transition: opacity 0.2s;
+      line-height: var(--hdr);
+      height: var(--hdr);
+      display: flex;
+      align-items: center;
       text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
     .nav-btn:hover,
-    .nav-btn.active { opacity: 1; }
+    .nav-btn.active { opacity: 1; color: #fff; }
 
-    .films-nav { 
-      position: relative; 
+    /* Films dropdown */
+    .films-nav {
+      position: relative;
       display: flex;
       align-items: center;
-      height: 100%;
+      height: var(--hdr);
     }
 
     .films-drop {
       display: none;
       flex-direction: column;
       position: absolute;
-      top: calc(100% - 10px);
-      right: -20px;
-      background: rgba(17, 17, 16, 0.95);
-      backdrop-filter: blur(10px);
+      top: calc(100% - 2px);
+      right: 0;
+      background: rgba(12,12,11,0.97);
       border: 1px solid var(--border);
       min-width: 210px;
       padding: 10px 0;
+      backdrop-filter: blur(10px);
     }
 
     .films-drop.open { display: flex; }
@@ -121,8 +123,8 @@
       border: none;
       font-family: 'DM Sans', sans-serif;
       font-size: 11.5px;
-      font-weight: 400;
-      letter-spacing: 0.05em;
+      font-weight: 300;
+      letter-spacing: 0.04em;
       color: var(--dim);
       padding: 10px 22px;
       text-align: left;
@@ -131,7 +133,7 @@
       width: 100%;
     }
 
-    .drop-btn:hover { color: #fff; background: #222220; }
+    .drop-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
 
     /* ═══════════════════════════════
        PAGE SYSTEM
@@ -143,421 +145,1027 @@
       top: var(--hdr);
       background: var(--bg);
       overflow-y: auto;
+      overflow-x: hidden;
       z-index: 10;
     }
 
-    #page-home { top: 0; height: 100vh; overflow: hidden; }
+    #page-home { top: 0; }
 
     .page.active { display: block; }
 
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .fade-in { animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .fade-in { animation: fadeIn 0.35s ease forwards; }
 
     /* ═══════════════════════════════
-       HOME SLIDESHOW
+       HOME — fullscreen slideshow
     ═══════════════════════════════ */
-    .slideshow { position: relative; width: 100%; height: 100%; background: #000; }
-    .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease-in-out; }
-    .slide.active { opacity: 1; }
-    .slide img { width: 100%; height: 100%; object-fit: cover; }
+    #page-home { height: 100vh; }
 
-    .slide-arrow {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      z-index: 20; background: none; border: none; cursor: pointer;
-      padding: 20px 30px; color: rgba(255,255,255,0.4); font-size: 24px;
-      transition: color 0.2s;
+    .slideshow {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #0d0d0c;
+      overflow: hidden;
     }
-    .slide-arrow:hover { color: #fff; }
-    .slide-arrow.left { left: 10px; }
-    .slide-arrow.right { right: 10px; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .slide.active { opacity: 1; }
+
+    .slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Slideshow arrows — SVG, prominent */
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 20px 32px;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.25s;
+      display: flex;
+      align-items: center;
+    }
+
+    .slide-arrow:hover { color: rgba(255,255,255,0.95); }
+    .slide-arrow.left  { left: 0; }
+    .slide-arrow.right { right: 0; }
+
+    .slide-arrow svg { display: block; }
+
+    /* ═══════════════════════════════
+       REEL
+    ═══════════════════════════════ */
+    #page-reel {
+      display: none;
+      background: #000;
+    }
+
+    #page-reel.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - var(--hdr));
+    }
+
+    .reel-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+    }
+
+    .reel-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .play-ring {
+      width: 58px; height: 58px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .play-overlay:hover .play-ring {
+      border-color: rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.05);
+    }
 
     /* ═══════════════════════════════
        FILMS GALLERY
     ═══════════════════════════════ */
+    #page-films { min-height: calc(100vh - var(--hdr)); }
+
     .films-header {
-      display: flex; gap: 28px; padding: 40px 48px 30px;
-      position: sticky; top: 0; background: var(--bg); z-index: 5;
+      display: flex;
+      gap: 28px;
+      padding: 36px 48px 28px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(9,9,8,0.97);
+      backdrop-filter: blur(6px);
+      z-index: 5;
     }
 
     .toggle-btn {
-      background: none; border: none; font-family: 'DM Sans', sans-serif;
-      font-size: 11px; font-weight: 500; letter-spacing: 0.18em;
-      color: var(--dim); cursor: pointer; padding-bottom: 6px;
-      border-bottom: 1px solid transparent; transition: 0.2s;
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      cursor: pointer;
+      padding: 0 0 4px;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
     }
-    .toggle-btn.active { color: var(--text); border-bottom-color: var(--text); }
 
-    .film-grid { display: none; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
-    .film-grid.active { display: grid; }
+    .toggle-btn.active {
+      color: var(--text);
+      border-bottom-color: var(--text);
+    }
 
-    .film-card { position: relative; aspect-ratio: 3/2; background: #111; cursor: pointer; overflow: hidden; }
-    
-    .film-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-    .film-card:hover img { transform: scale(1.05); }
+    .film-grid { display: none; }
+    .film-grid.active {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 2px;
+    }
 
+    .film-card {
+      position: relative;
+      aspect-ratio: 3/2;
+      background: #141413;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .film-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.55s ease, opacity 0.35s;
+    }
+
+    .film-card:hover img {
+      transform: scale(1.04);
+      opacity: 0.72;
+    }
+
+    /* Title always visible at bottom-left */
     .film-card-overlay {
-      position: absolute; inset: 0; display: flex; align-items: flex-end;
-      padding: 22px 24px; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px 18px;
+      background: linear-gradient(to top, rgba(0,0,0,0.58) 0%, transparent 50%);
+      pointer-events: none;
     }
 
     .film-card-title {
-      font-size: 13px; font-weight: 500; letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.8); transition: 0.3s;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.82);
+      transition: color 0.25s, transform 0.25s;
     }
-    .film-card:hover .film-card-title { color: #fff; transform: translateY(-3px); }
+
+    .film-card:hover .film-card-title {
+      color: #fff;
+      transform: translateY(-3px);
+    }
 
     /* ═══════════════════════════════
        INDIVIDUAL FILM PAGE
     ═══════════════════════════════ */
-    .film-page-inner { padding: 44px 48px 80px; }
-    .film-back { 
-      background: none; border: none; color: var(--dim); cursor: pointer;
-      font-family: 'DM Sans'; font-size: 11px; letter-spacing: 0.15em; margin-bottom: 40px;
-    }
-    .film-back:hover { color: #fff; }
-    .film-title-name { font-size: clamp(24px, 4vw, 42px); font-weight: 600; margin-bottom: 8px; }
-    .film-title-role { font-size: 10px; color: var(--dim); letter-spacing: 0.2em; margin-bottom: 40px; }
+    #page-film { min-height: calc(100vh - var(--hdr)); }
 
-    .stills-track { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; overflow: hidden; }
-    .still-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease; }
-    .still-slide.active { opacity: 1; }
-    
-    .still-slide img { width: 100%; height: 100%; object-fit: contain; }
+    .film-page-inner { padding: 44px 48px 80px; }
+
+    .film-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      padding: 0;
+      margin-bottom: 36px;
+      transition: color 0.2s;
+    }
+
+    .film-back:hover { color: var(--text); }
+
+    .film-title-block { margin-bottom: 28px; }
+
+    .film-title-name {
+      font-size: clamp(22px, 3.5vw, 40px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 9px;
+      line-height: 1.1;
+    }
+
+    .film-title-role {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+    }
+
+    /* Stills carousel */
+    .stills-carousel { position: relative; width: 100%; }
+
+    .stills-track {
+      position: relative;
+      width: 100%;
+      background: #0d0d0c;
+      overflow: hidden;
+      /* height adapts to image via padding-bottom trick or flex */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+
+    .stills-track-inner {
+      position: relative;
+      width: 100%;
+    }
+
+    .still-slide {
+      display: none;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .still-slide.active { display: flex; }
+
+    /* Stills: show at natural size, no crop */
+    .still-slide img {
+      max-width: 100%;
+      max-height: 75vh;
+      width: auto;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .still-ph {
+      width: 100%;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: #333;
+    }
+
+    /* Stills arrows — inside track wrapper, centered vertically */
+    .stills-arrows {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 0; right: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
     .still-arrow {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; padding: 20px;
-      color: rgba(255,255,255,0.3); font-size: 20px; transition: 0.2s;
+      pointer-events: all;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 20px 28px;
+      color: rgba(226,224,218,0.45);
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
     }
-    .still-arrow:hover { color: #fff; }
-    .still-arrow.left { left: 0; }
-    .still-arrow.right { right: 0; }
 
-    .stills-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
-    .stills-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--dim); cursor: pointer; border: none; }
-    .stills-dot.active { background: #fff; }
+    .still-arrow:hover { color: rgba(226,224,218,0.9); }
+
+    .stills-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .stills-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--dim);
+      transition: background 0.2s;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+    }
+
+    .stills-dot.active { background: var(--text); }
 
     /* ═══════════════════════════════
-       ABOUT
+       ABOUT — elegant portrait layout
     ═══════════════════════════════ */
-    #page-about.active { display: grid; grid-template-columns: 1fr 1fr; }
-    .about-img { height: calc(100vh - var(--hdr)); background: #111; }
-    .about-img img { width: 100%; height: 100%; object-fit: cover; }
-    .about-content { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; }
-    .about-bio { font-size: 17px; line-height: 1.9; font-weight: 300; }
+    #page-about {
+      display: none;
+      min-height: calc(100vh - var(--hdr));
+    }
+
+    #page-about.active {
+      display: flex;
+      align-items: center;
+      padding: 60px 72px;
+      gap: 80px;
+    }
+
+    .about-portrait-wrap {
+      flex-shrink: 0;
+      width: 30%;
+      max-width: 320px;
+    }
+
+    .about-portrait-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 72vh;
+      object-fit: contain;
+    }
+
+    .about-portrait-ph {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: #141413;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: #333;
+    }
+
+    .about-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .about-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      color: var(--dim);
+    }
+
+    .about-bio {
+      font-size: clamp(15px, 1.5vw, 17px);
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--text);
+    }
 
     /* ═══════════════════════════════
        CONTACT
     ═══════════════════════════════ */
-    #page-contact { padding: 80px 48px; display: none; flex-direction: column; justify-content: center; align-items: center; }
-    #page-contact.active { display: flex; }
-    .contact-email { font-size: 18px; color: #fff; text-decoration: none; margin-bottom: 60px; }
-    .contact-form { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 30px; }
-    .form-field input, .form-field textarea {
-      width: 100%; background: none; border: none; border-bottom: 1px solid var(--faint);
-      padding: 10px 0; color: #fff; font-family: 'DM Sans'; outline: none; transition: 0.3s;
+    #page-contact {
+      display: none;
+      min-height: calc(100vh - var(--hdr));
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 48px 80px;
     }
-    .form-field input:focus { border-bottom-color: #fff; }
-    .form-submit { background: none; border: 1px solid #fff; color: #fff; padding: 12px 40px; cursor: pointer; align-self: flex-start; transition: 0.3s; }
-    .form-submit:hover { background: #fff; color: #000; }
 
+    #page-contact.active { display: flex; }
+
+    .contact-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      color: var(--dim);
+      margin-bottom: 12px;
+    }
+
+    .contact-email {
+      display: inline-block;
+      font-size: 12.5px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      text-decoration: none;
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--faint);
+      padding-bottom: 3px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .contact-email:hover { color: var(--text); border-color: var(--dim); }
+
+    .contact-form {
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .form-field label {
+      font-size: 9.5px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+    }
+
+    .form-field input,
+    .form-field textarea {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--faint);
+      padding: 9px 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+      width: 100%;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus { border-bottom-color: var(--dim); }
+
+    .form-field textarea { resize: none; height: 88px; }
+
+    .form-submit {
+      align-self: flex-start;
+      background: none;
+      border: 1px solid rgba(245,244,240,0.35);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--text);
+      cursor: pointer;
+      padding: 11px 36px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .form-submit:hover {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .form-success {
+      display: none;
+      margin-top: 20px;
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+    }
+
+    /* ═══════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════ */
     @media (max-width: 860px) {
-      .film-grid { grid-template-columns: 1fr 1fr; }
-      #page-about.active { grid-template-columns: 1fr; }
-      .about-img { height: 70vw; }
+      header { padding: 0 24px; }
+      nav { gap: 20px; }
+      .film-grid.active { grid-template-columns: 1fr 1fr; }
+      .film-page-inner, .films-header { padding-left: 24px; padding-right: 24px; }
+      #page-about.active { flex-direction: column; padding: 40px 24px; gap: 40px; }
+      .about-portrait-wrap { width: 60%; max-width: none; }
+      #page-contact { padding: 48px 24px 60px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .film-grid.active { grid-template-columns: 1fr; }
+      .logo-role { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- ═══ HEADER ═══ -->
   <header>
     <div class="logo" onclick="showPage('home')">
       <div class="logo-name">YIFAN XIAO</div>
       <div class="logo-role">DIRECTOR OF PHOTOGRAPHY</div>
     </div>
     <nav>
-      <button class="nav-btn active" id="nav-home" onclick="showPage('home')">HOME</button>
-      <button class="nav-btn" id="nav-reel" onclick="showPage('reel')">REEL</button>
+      <button class="nav-btn active" id="nav-home"    onclick="showPage('home')">HOME</button>
+      <button class="nav-btn"        id="nav-reel"    onclick="showPage('reel')">REEL</button>
       <div class="films-nav" id="films-nav">
         <button class="nav-btn" id="nav-films" onclick="showPage('films')">FILMS</button>
         <div class="films-drop" id="films-drop">
-          <button class="drop-btn" onclick="showFilm('woksapewisdom')">Woksape: Wisdom</button>
+          <button class="drop-btn" onclick="showFilm('woksape-wisdom')">Woksape: Wisdom</button>
+          <button class="drop-btn" onclick="showFilm('there-is-no-wind')">There Is No Wind</button>
           <button class="drop-btn" onclick="showFilm('glance')">Glance</button>
+          <button class="drop-btn" onclick="showFilm('tacha-skan')">Tacha Skan</button>
+          <button class="drop-btn" onclick="showFilm('personal-message')">Personal Message</button>
           <button class="drop-btn" onclick="showFilm('words')">Words</button>
           <button class="drop-btn" onclick="showFilm('distant')">Distant</button>
-          <button class="drop-btn" onclick="showFilm('thereisnowind')">There Is No Wind</button>
-          <button class="drop-btn" onclick="showFilm('tachaskan')">Tacha Skan</button>
-          <button class="drop-btn" onclick="showFilm('personalmessage')">Personal Message</button>
-          <button class="drop-btn" onclick="showFilm('endlesssleep')">Endless Sleep</button>
+          <button class="drop-btn" onclick="showFilm('endless-sleep')">Endless Sleep</button>
           <button class="drop-btn" onclick="showFilm('recital')">Recital</button>
-          <button class="drop-btn" onclick="showFilm('deadline')">Deadline</button>
         </div>
       </div>
-      <button class="nav-btn" id="nav-about" onclick="showPage('about')">ABOUT</button>
+      <button class="nav-btn" id="nav-about"   onclick="showPage('about')">ABOUT</button>
       <button class="nav-btn" id="nav-contact" onclick="showPage('contact')">CONTACT</button>
     </nav>
   </header>
 
+  <!-- ═══ HOME ═══ -->
   <div class="page active" id="page-home">
-    <div class="slideshow" id="home-slideshow"></div>
-    <button class="slide-arrow left" onclick="moveSlide(-1)">&#8592;</button>
-    <button class="slide-arrow right" onclick="moveSlide(1)">&#8594;</button>
+    <div class="slideshow" id="home-slideshow">
+      <div class="slide active"><img src="images/site/homepage1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/woksape/woksape8.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/glance/glance1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/distant/distant1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/personalmessage/personalmessage1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/endlesssleep/endlesssleep2.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/tachaskan/tachaskan1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/woksape/woksape1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/woksape/woksape5.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/whispersofthesea/whispersofthesea1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/inthepainting/inthepainting5.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/woksape/woksape7.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/woksape/woksape9.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/words/words3.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg" alt=""></div>
+
+      <button class="slide-arrow left" onclick="moveSlide(-1)" aria-label="Previous">
+        <svg width="22" height="38" viewBox="0 0 22 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 2L3 19L20 36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="slide-arrow right" onclick="moveSlide(1)" aria-label="Next">
+        <svg width="22" height="38" viewBox="0 0 22 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 2L19 19L2 36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
   </div>
 
+  <!-- ═══ REEL ═══ -->
+  <div class="page" id="page-reel">
+    <div style="width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;">
+      <div class="reel-wrap" id="reel-wrap">
+        <div class="play-overlay" id="play-overlay" onclick="loadReel()">
+          <div class="play-ring">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 1.5L12 7L3 12.5V1.5Z" fill="rgba(236,233,226,0.7)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FILMS GALLERY ═══ -->
   <div class="page" id="page-films">
     <div class="films-header">
       <button class="toggle-btn active" id="toggle-cinema" onclick="switchTab('cinema')">CINEMATOGRAPHY</button>
-      <button class="toggle-btn" id="toggle-direct" onclick="switchTab('direct')">DIRECTING</button>
+      <button class="toggle-btn"        id="toggle-direct" onclick="switchTab('direct')">DIRECTING</button>
     </div>
 
+    <!-- Cinematography -->
     <div class="film-grid active" id="grid-cinema">
-      <div class="film-card" onclick="showFilm('woksapewisdom')">
-        <img src="/images/thumbnails/woksapewisdomthumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('woksape-wisdom')">
+        <img src="images/thumbnails/woksapethumb.jpg" alt="Woksape: Wisdom">
         <div class="film-card-overlay"><span class="film-card-title">Woksape: Wisdom</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('thereisnowind')">
-        <img src="/images/thumbnails/thereisnowindthumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('there-is-no-wind')">
+        <img src="images/thumbnails/thereisnowindthumb.jpg" alt="There Is No Wind">
         <div class="film-card-overlay"><span class="film-card-title">There Is No Wind</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('tachaskan')">
-        <img src="/images/thumbnails/tachaskanthumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('tacha-skan')">
+        <img src="images/thumbnails/tacaskanthumb.jpg" alt="Tacha Skan">
         <div class="film-card-overlay"><span class="film-card-title">Tacha Skan</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('personalmessage')">
-        <img src="/images/thumbnails/personalmessagethumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('personal-message')">
+        <img src="images/thumbnails/personalmessagethumb.jpg" alt="Personal Message">
         <div class="film-card-overlay"><span class="film-card-title">Personal Message</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('endlesssleep')">
-        <img src="/images/thumbnails/endlesssleepthumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('endless-sleep')">
+        <img src="images/thumbnails/endlesssleepthumb.jpg" alt="Endless Sleep">
         <div class="film-card-overlay"><span class="film-card-title">Endless Sleep</span></div>
       </div>
       <div class="film-card" onclick="showFilm('recital')">
-        <img src="/images/thumbnails/recitalthumb.jpg" alt="">
+        <img src="images/thumbnails/recitalthumb.jpg" alt="Recital">
         <div class="film-card-overlay"><span class="film-card-title">Recital</span></div>
       </div>
       <div class="film-card" onclick="showFilm('deadline')">
-        <img src="/images/thumbnails/deadlinethumb.jpg" alt="">
+        <img src="images/thumbnails/deadlinethumb.jpg" alt="Deadline">
         <div class="film-card-overlay"><span class="film-card-title">Deadline</span></div>
       </div>
     </div>
 
+    <!-- Directing -->
     <div class="film-grid" id="grid-direct">
       <div class="film-card" onclick="showFilm('glance')">
-        <img src="/images/thumbnails/glancethumb.jpg" alt="">
+        <img src="images/thumbnails/glancethumb.jpg" alt="Glance">
         <div class="film-card-overlay"><span class="film-card-title">Glance</span></div>
       </div>
       <div class="film-card" onclick="showFilm('words')">
-        <img src="/images/thumbnails/wordsthumb.jpg" alt="">
+        <img src="images/thumbnails/wordsthumb.jpg" alt="Words">
         <div class="film-card-overlay"><span class="film-card-title">Words</span></div>
       </div>
       <div class="film-card" onclick="showFilm('distant')">
-        <img src="/images/thumbnails/distantthumb.jpg" alt="">
+        <img src="images/thumbnails/distantthumb.jpg" alt="Distant">
         <div class="film-card-overlay"><span class="film-card-title">Distant</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('whispersofthesea')">
-        <img src="/images/thumbnails/whispersoftheseathumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('whispers-of-the-sea')">
+        <img src="images/thumbnails/whispersoftheseathumb.jpg" alt="Whispers of the Sea">
         <div class="film-card-overlay"><span class="film-card-title">Whispers of the Sea</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('whentheearthturnsblue')">
-        <img src="/images/thumbnails/whentheearthturnsbluethumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('when-the-earth-turns-blue')">
+        <img src="images/thumbnails/whentheearthturnsblue thumb.jpg" alt="When the Earth Turns Blue">
         <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('afterthepass')">
-        <img src="/images/thumbnails/afterthepassthumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('after-the-pass')">
+        <img src="images/thumbnails/afterthepassthumb.jpg" alt="After the Pass">
         <div class="film-card-overlay"><span class="film-card-title">After the Pass</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('inthepainting')">
-        <img src="/images/thumbnails/inthepaintingthumb.jpg" alt="">
+      <div class="film-card" onclick="showFilm('endless-sleep')">
+        <img src="images/thumbnails/endlesssleepthumb.jpg" alt="Endless Sleep">
+        <div class="film-card-overlay"><span class="film-card-title">Endless Sleep</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('deadline')">
+        <img src="images/thumbnails/deadlinethumb.jpg" alt="Deadline">
+        <div class="film-card-overlay"><span class="film-card-title">Deadline</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('recital')">
+        <img src="images/thumbnails/recitalthumb.jpg" alt="Recital">
+        <div class="film-card-overlay"><span class="film-card-title">Recital</span></div>
+      </div>
+      <div class="film-card" onclick="showFilm('in-the-painting')">
+        <img src="images/thumbnails/inthepaintingthumb.jpg" alt="In the Painting">
         <div class="film-card-overlay"><span class="film-card-title">In the Painting</span></div>
       </div>
     </div>
   </div>
 
+  <!-- ═══ INDIVIDUAL FILM ═══ -->
   <div class="page" id="page-film">
     <div class="film-page-inner">
-      <button class="film-back" onclick="showPage('films')">← BACK TO FILMS</button>
-      <div class="film-title-name" id="film-name"></div>
-      <div class="film-title-role" id="film-role"></div>
-      <div class="stills-track" id="stills-track"></div>
-      <button class="still-arrow left" onclick="moveStill(-1)">&#8592;</button>
-      <button class="still-arrow right" onclick="moveStill(1)">&#8594;</button>
-      <div class="stills-dots" id="stills-dots"></div>
+      <button class="film-back" onclick="showPage('films')">← FILMS</button>
+      <div class="film-title-block">
+        <div class="film-title-name" id="film-name"></div>
+        <div class="film-title-role" id="film-role"></div>
+      </div>
+      <div class="stills-carousel" id="stills-carousel">
+        <div class="stills-track" id="stills-track">
+          <div class="stills-track-inner" id="stills-track-inner">
+            <!-- slides injected by JS -->
+          </div>
+          <div class="stills-arrows">
+            <button class="still-arrow" id="still-prev" onclick="moveStill(-1)" aria-label="Previous">
+              <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
+                <path d="M14 2L2 14L14 26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="still-arrow" id="still-next" onclick="moveStill(1)" aria-label="Next">
+              <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
+                <path d="M2 2L14 14L2 26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="stills-dots" id="stills-dots"></div>
+      </div>
     </div>
   </div>
 
+  <!-- ═══ ABOUT ═══ -->
   <div class="page" id="page-about">
-    <div class="about-img">
-      <img src="/images/site/portrait.jpg" alt="Yifan Xiao">
+    <div class="about-portrait-wrap">
+      <img src="images/site/portrait.jpg" alt="Yifan Xiao"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="about-portrait-ph" style="display:none">PORTRAIT</div>
     </div>
     <div class="about-content">
-      <div class="about-bio">Yifan Xiao is a filmmaker and Graduate Film MFA candidate at NYU Tisch. Working across directing and cinematography, his films have screened internationally.</div>
+      <div class="about-label">ABOUT</div>
+      <p class="about-bio">Yifan Xiao is a filmmaker and Graduate Film MFA candidate at NYU Tisch. Working across directing and cinematography, his films have screened internationally.</p>
     </div>
+  </div>
+
+  <!-- ═══ CONTACT ═══ -->
+  <div class="page" id="page-contact">
+    <div class="contact-label">CONTACT</div>
+    <a class="contact-email" href="mailto:xyifanxiao@gmail.com">xyifanxiao@gmail.com</a>
+    <form class="contact-form" id="contact-form">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="f-first">FIRST NAME</label>
+          <input id="f-first" name="first_name" type="text" required autocomplete="given-name">
+        </div>
+        <div class="form-field">
+          <label for="f-last">LAST NAME</label>
+          <input id="f-last" name="last_name" type="text" required autocomplete="family-name">
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="f-email">EMAIL ADDRESS</label>
+        <input id="f-email" name="email" type="email" required autocomplete="email">
+      </div>
+      <div class="form-field">
+        <label for="f-subject">SUBJECT</label>
+        <input id="f-subject" name="subject" type="text" required>
+      </div>
+      <div class="form-field">
+        <label for="f-message">MESSAGE</label>
+        <textarea id="f-message" name="message" required></textarea>
+      </div>
+      <button class="form-submit" type="submit" id="form-submit-btn">SEND</button>
+      <div class="form-success" id="form-success">Message sent — thank you.</div>
+    </form>
   </div>
 
   <script>
-    const HOME_SLIDES = [
-      '/images/site/homepage1.jpg',
-      '/images/stills/woksape/woksape8.jpg',
-      '/images/stills/glance/glance1.jpg',
-      '/images/stills/distant/distant1.jpg',
-      '/images/stills/personalmessage/personalmessage1.jpg',
-      '/images/stills/endlesssleep/endlesssleep2.jpg',
-      '/images/stills/tachaskan/tachaskan1.jpg',
-      '/images/stills/woksape/woksape1.jpg',
-      '/images/stills/woksape/woksape5.jpg',
-      '/images/stills/whispersofthesea/whispersofthesea1.jpg',
-      '/images/stills/inthepainting/inthepainting5.jpg',
-      '/images/stills/woksape/woksape7.jpg',
-      '/images/stills/woksape/woksape9.jpg',
-      '/images/stills/words/words3.jpg',
-      '/images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg'
-    ];
+    /* ══════════════════════════════
+       CONFIG
+    ══════════════════════════════ */
+    const VIMEO_ID  = 'YOUR_VIMEO_ID';
+    const FORMSPREE = 'xaqvdzdg';
+
+    /* ══════════════════════════════
+       FILM DATA
+       stills: array of image paths (natural size, no crop)
+    ══════════════════════════════ */
+    function stills(folder, prefix, count) {
+      return Array.from({length: count}, (_, i) =>
+        `images/stills/${folder}/${prefix}${i+1}.jpg`);
+    }
 
     const FILMS = {
-      'woksapewisdom': { 
-        title: 'Woksape: Wisdom', 
-        role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['/images/stills/woksape/woksape1.jpg','/images/stills/woksape/woksape5.jpg','/images/stills/woksape/woksape7.jpg','/images/stills/woksape/woksape8.jpg','/images/stills/woksape/woksape9.jpg'] 
-      },
-      'glance': { 
-        title: 'Glance', 
-        role: 'DIRECTOR / DP', 
-        stills: ['/images/stills/glance/glance1.jpg','/images/stills/glance/glance2.jpg','/images/stills/glance/glance3.jpg'] 
-      },
-      'words': { 
-        title: 'Words', 
-        role: 'DIRECTOR', 
-        stills: ['/images/stills/words/words1.jpg','/images/stills/words/words2.jpg','/images/stills/words/words3.jpg'] 
-      },
-      'distant': { 
-        title: 'Distant', 
-        role: 'DIRECTOR', 
-        stills: ['/images/stills/distant/distant1.jpg'] 
-      },
-      'thereisnowind': { 
-        title: 'There Is No Wind', 
-        role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['/images/stills/thereisnowind/thereisnowind1.jpg'] 
-      },
-      'tachaskan': { 
-        title: 'Tacha Skan', 
-        role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['/images/stills/tachaskan/tachaskan1.jpg'] 
-      },
-      'personalmessage': { 
-        title: 'Personal Message', 
-        role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['/images/stills/personalmessage/personalmessage1.jpg'] 
-      },
-      'endlesssleep': { 
-        title: 'Endless Sleep', 
-        role: 'DIRECTOR / DP', 
-        stills: ['/images/stills/endlesssleep/endlesssleep1.jpg','/images/stills/endlesssleep/endlesssleep2.jpg'] 
-      },
-      'recital': { 
-        title: 'Recital', 
-        role: 'DIRECTOR / DP', 
-        stills: ['/images/stills/recital/recital1.jpg'] 
-      },
-      'deadline': { 
-        title: 'Deadline', 
-        role: 'DIRECTOR / DP', 
-        stills: ['/images/stills/deadline/deadline1.jpg'] 
-      },
-      'whispersofthesea': { 
-        title: 'Whispers of the Sea', 
-        role: 'DIRECTOR', 
-        stills: ['/images/stills/whispersofthesea/whispersofthesea1.jpg'] 
-      },
-      'whentheearthturnsblue': { 
-        title: 'When the Earth Turns Blue', 
-        role: 'DIRECTOR', 
-        stills: ['/images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg'] 
-      },
-      'afterthepass': { 
-        title: 'After the Pass', 
-        role: 'DIRECTOR', 
-        stills: ['/images/stills/afterthepass/afterthepass1.jpg'] 
-      },
-      'inthepainting': { 
-        title: 'In the Painting', 
-        role: 'DIRECTOR', 
-        stills: ['/images/stills/inthepainting/inthepainting1.jpg','/images/stills/inthepainting/inthepainting5.jpg'] 
-      }
+      'woksape-wisdom':            { title: 'Woksape: Wisdom',           role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: stills('woksape','woksape',10) },
+      'there-is-no-wind':          { title: 'There Is No Wind',          role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: [] },
+      'tacha-skan':                { title: 'Tacha Skan',                role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: stills('tachaskan','tachaskan',5) },
+      'personal-message':          { title: 'Personal Message',          role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: stills('personalmessage','personalmessage',5) },
+      'endless-sleep':             { title: 'Endless Sleep',             role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
+        stills: stills('endlesssleep','endlesssleep',4) },
+      'recital':                   { title: 'Recital',                   role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
+        stills: stills('recital','recital',5) },
+      'deadline':                  { title: 'Deadline',                  role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
+        stills: stills('deadline','deadline',1) },
+      'glance':                    { title: 'Glance',                    role: 'DIRECTOR',
+        stills: stills('glance','glance',7) },
+      'words':                     { title: 'Words',                     role: 'DIRECTOR',
+        stills: stills('words','words',5) },
+      'distant':                   { title: 'Distant',                   role: 'DIRECTOR',
+        stills: stills('distant','distant',5) },
+      'whispers-of-the-sea':       { title: 'Whispers of the Sea',       role: 'DIRECTOR',
+        stills: stills('whispersofthesea','whispersofthesea',6) },
+      'when-the-earth-turns-blue': { title: 'When the Earth Turns Blue', role: 'DIRECTOR',
+        stills: stills('whentheearthturnsblue','whentheearthturnsblue',4) },
+      'after-the-pass':            { title: 'After the Pass',            role: 'DIRECTOR',
+        stills: stills('afterthepass','afterthepass',5) },
+      'in-the-painting':           { title: 'In the Painting',           role: 'DIRECTOR',
+        stills: stills('inthepainting','inthepainting',5) },
     };
 
+    /* ══════════════════════════════
+       PAGE NAVIGATION
+    ══════════════════════════════ */
     function showPage(name) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       const page = document.getElementById('page-' + name);
-      if (page) { page.classList.add('active', 'fade-in'); }
+      if (!page) return;
+      page.classList.add('active');
+      void page.offsetWidth;
+      page.classList.add('fade-in');
       const btn = document.getElementById('nav-' + name);
-      if (btn) { btn.classList.add('active'); }
-      document.getElementById('films-drop').classList.remove('open');
+      if (btn) btn.classList.add('active');
+      page.scrollTop = 0;
+      filmsDrop.classList.remove('open');
     }
 
-    let curStill = 0, curStills = [];
+    /* ══════════════════════════════
+       INDIVIDUAL FILM
+    ══════════════════════════════ */
+    let stillIdx = 0;
+    let stillCount = 0;
+
     function showFilm(slug) {
       const film = FILMS[slug];
+      if (!film) return;
+
       document.getElementById('film-name').textContent = film.title;
       document.getElementById('film-role').textContent = film.role;
-      curStills = film.stills; curStill = 0;
-      updateStills();
-      showPage('film');
+
+      const inner = document.getElementById('stills-track-inner');
+      const dots  = document.getElementById('stills-dots');
+      inner.innerHTML = '';
+      dots.innerHTML  = '';
+      stillIdx   = 0;
+      stillCount = film.stills.length;
+
+      if (stillCount === 0) {
+        // No stills yet
+        const ph = document.createElement('div');
+        ph.className = 'still-slide active';
+        ph.innerHTML = '<div class="still-ph">STILLS COMING SOON</div>';
+        inner.appendChild(ph);
+        document.getElementById('still-prev').style.display = 'none';
+        document.getElementById('still-next').style.display = 'none';
+        dots.style.display = 'none';
+      } else {
+        film.stills.forEach((src, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'still-slide' + (i === 0 ? ' active' : '');
+          slide.innerHTML = `<img src="${src}" alt="${film.title} still ${i+1}">`;
+          inner.appendChild(slide);
+
+          const dot = document.createElement('button');
+          dot.className = 'stills-dot' + (i === 0 ? ' active' : '');
+          dot.onclick = () => goToStill(i);
+          dots.appendChild(dot);
+        });
+
+        const multi = stillCount > 1;
+        document.getElementById('still-prev').style.display = multi ? '' : 'none';
+        document.getElementById('still-next').style.display = multi ? '' : 'none';
+        dots.style.display = multi ? '' : 'none';
+      }
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const page = document.getElementById('page-film');
+      page.classList.add('active');
+      void page.offsetWidth;
+      page.classList.add('fade-in');
+      document.getElementById('nav-films').classList.add('active');
+      page.scrollTop = 0;
+      filmsDrop.classList.remove('open');
     }
 
-    function updateStills() {
-      const track = document.getElementById('stills-track');
-      const dots = document.getElementById('stills-dots');
-      track.innerHTML = ''; dots.innerHTML = '';
-      curStills.forEach((src, i) => {
-        const s = document.createElement('div');
-        s.className = 'still-slide' + (i === curStill ? ' active' : '');
-        s.innerHTML = `<img src="${src}">`;
-        track.appendChild(s);
-        const d = document.createElement('button');
-        d.className = 'stills-dot' + (i === curStill ? ' active' : '');
-        d.onclick = () => { curStill = i; updateStills(); };
-        dots.appendChild(d);
-      });
+    function goToStill(idx) {
+      const slides = document.querySelectorAll('#stills-track-inner .still-slide');
+      const dots   = document.querySelectorAll('.stills-dot');
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      stillIdx = (idx + slides.length) % slides.length;
+      slides[stillIdx].classList.add('active');
+      if (dots[stillIdx]) dots[stillIdx].classList.add('active');
     }
 
-    function moveStill(dir) {
-      curStill = (curStill + dir + curStills.length) % curStills.length;
-      updateStills();
+    function moveStill(dir) { goToStill(stillIdx + dir); }
+
+    /* ══════════════════════════════
+       FILMS TAB TOGGLE
+    ══════════════════════════════ */
+    function switchTab(tab) {
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.film-grid').forEach(g => g.classList.remove('active'));
+      document.getElementById('toggle-' + tab).classList.add('active');
+      document.getElementById('grid-'   + tab).classList.add('active');
     }
 
-    let sIdx = 0;
-    function initHome() {
-      const h = document.getElementById('home-slideshow');
-      HOME_SLIDES.forEach((src, i) => {
-        const s = document.createElement('div');
-        s.className = 'slide' + (i === 0 ? ' active' : '');
-        s.innerHTML = `<img src="${src}">`;
-        h.appendChild(s);
-      });
-      setInterval(() => moveSlide(1), 10000);
+    /* ══════════════════════════════
+       FILMS DROPDOWN
+    ══════════════════════════════ */
+    const filmsNav  = document.getElementById('films-nav');
+    const filmsDrop = document.getElementById('films-drop');
+    let dropTimer;
+
+    filmsNav.addEventListener('mouseenter', () => {
+      clearTimeout(dropTimer);
+      filmsDrop.classList.add('open');
+    });
+    filmsNav.addEventListener('mouseleave', () => {
+      dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 200);
+    });
+    filmsDrop.addEventListener('mouseenter', () => clearTimeout(dropTimer));
+    filmsDrop.addEventListener('mouseleave', () => {
+      dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 200);
+    });
+
+    /* ══════════════════════════════
+       HOME SLIDESHOW
+    ══════════════════════════════ */
+    let slideIdx = 0;
+    let slideTimer;
+
+    function goToSlide(idx) {
+      const slides = document.querySelectorAll('#home-slideshow .slide');
+      slides.forEach(s => s.classList.remove('active'));
+      slideIdx = (idx + slides.length) % slides.length;
+      slides[slideIdx].classList.add('active');
     }
 
     function moveSlide(dir) {
-      const slides = document.querySelectorAll('.slide');
-      if (slides.length === 0) return;
-      slides[sIdx].classList.remove('active');
-      sIdx = (sIdx + dir + slides.length) % slides.length;
-      slides[sIdx].classList.add('active');
+      goToSlide(slideIdx + dir);
+      resetSlideTimer();
     }
 
-    function switchTab(t) {
-      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.film-grid').forEach(g => g.classList.remove('active'));
-      document.getElementById('toggle-' + t).classList.add('active');
-      document.getElementById('grid-' + t).classList.add('active');
+    function resetSlideTimer() {
+      clearInterval(slideTimer);
+      slideTimer = setInterval(() => goToSlide(slideIdx + 1), 10000);
     }
 
-    document.getElementById('nav-films').addEventListener('mouseenter', () => document.getElementById('films-drop').classList.add('open'));
-    document.getElementById('films-nav').addEventListener('mouseleave', () => document.getElementById('films-drop').classList.remove('open'));
+    resetSlideTimer();
 
-    initHome();
+    /* ══════════════════════════════
+       REEL
+    ══════════════════════════════ */
+    function loadReel() {
+      if (VIMEO_ID === 'YOUR_VIMEO_ID') {
+        alert('Replace YOUR_VIMEO_ID in the code with your Vimeo video ID.');
+        return;
+      }
+      const overlay = document.getElementById('play-overlay');
+      if (overlay) overlay.remove();
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&title=0&byline=0&portrait=0`;
+      iframe.allow = 'autoplay; fullscreen';
+      iframe.allowFullscreen = true;
+      document.getElementById('reel-wrap').appendChild(iframe);
+    }
+
+    /* ══════════════════════════════
+       CONTACT FORM
+       Uses Formspree to deliver emails to xyifanxiao@gmail.com
+       Instructions: formspree.io → New Form → copy ID → paste above
+    ══════════════════════════════ */
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn     = document.getElementById('form-submit-btn');
+      const success = document.getElementById('form-success');
+      btn.textContent = 'SENDING...';
+      btn.disabled = true;
+      const formData = new FormData(e.target);
+
+      try {
+        if (FORMSPREE === 'YOUR_FORM_ID') {
+          // Fallback: open mail client
+          const f = formData.get('first_name'), l = formData.get('last_name');
+          const em = formData.get('email'), s = formData.get('subject'), m = formData.get('message');
+          window.location.href = `mailto:xyifanxiao@gmail.com?subject=${encodeURIComponent(s)}&body=${encodeURIComponent('From: '+f+' '+l+'\nEmail: '+em+'\n\n'+m)}`;
+          btn.textContent = 'SEND';
+          btn.disabled = false;
+          return;
+        }
+        const res = await fetch(`https://formspree.io/f/${FORMSPREE}`, {
+          method: 'POST', body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          e.target.reset();
+          btn.style.display = 'none';
+          success.style.display = 'block';
+        } else {
+          btn.textContent = 'SEND';
+          btn.disabled = false;
+          alert('Something went wrong. Please try again.');
+        }
+      } catch (err) {
+        btn.textContent = 'SEND';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again.');
+      }
+    });
   </script>
 </body>
 </html>
