@@ -192,7 +192,6 @@
 
     .film-card { position: relative; aspect-ratio: 3/2; background: #111; cursor: pointer; overflow: hidden; }
     
-    /* 封面：缩放铺满 */
     .film-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .film-card:hover img { transform: scale(1.05); }
 
@@ -223,7 +222,6 @@
     .still-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease; }
     .still-slide.active { opacity: 1; }
     
-    /* 剧照：原比例显示 */
     .still-slide img { width: 100%; height: 100%; object-fit: contain; }
 
     .still-arrow {
@@ -314,62 +312,62 @@
 
     <div class="film-grid active" id="grid-cinema">
       <div class="film-card" onclick="showFilm('woksapewisdom')">
-        <img src="images/thumbnails/woksapewisdomthumb.jpg" alt="">
+        <img src="/images/thumbnails/woksapewisdomthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Woksape: Wisdom</span></div>
       </div>
       <div class="film-card" onclick="showFilm('thereisnowind')">
-        <img src="images/thumbnails/thereisnowindthumb.jpg" alt="">
+        <img src="/images/thumbnails/thereisnowindthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">There Is No Wind</span></div>
       </div>
       <div class="film-card" onclick="showFilm('tachaskan')">
-        <img src="images/thumbnails/tachaskanthumb.jpg" alt="">
+        <img src="/images/thumbnails/tachaskanthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Tacha Skan</span></div>
       </div>
       <div class="film-card" onclick="showFilm('personalmessage')">
-        <img src="images/thumbnails/personalmessagethumb.jpg" alt="">
+        <img src="/images/thumbnails/personalmessagethumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Personal Message</span></div>
       </div>
       <div class="film-card" onclick="showFilm('endlesssleep')">
-        <img src="images/thumbnails/endlesssleepthumb.jpg" alt="">
+        <img src="/images/thumbnails/endlesssleepthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Endless Sleep</span></div>
       </div>
       <div class="film-card" onclick="showFilm('recital')">
-        <img src="images/thumbnails/recitalthumb.jpg" alt="">
+        <img src="/images/thumbnails/recitalthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Recital</span></div>
       </div>
       <div class="film-card" onclick="showFilm('deadline')">
-        <img src="images/thumbnails/deadlinethumb.jpg" alt="">
+        <img src="/images/thumbnails/deadlinethumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Deadline</span></div>
       </div>
     </div>
 
     <div class="film-grid" id="grid-direct">
       <div class="film-card" onclick="showFilm('glance')">
-        <img src="images/thumbnails/glancethumb.jpg" alt="">
+        <img src="/images/thumbnails/glancethumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Glance</span></div>
       </div>
       <div class="film-card" onclick="showFilm('words')">
-        <img src="images/thumbnails/wordsthumb.jpg" alt="">
+        <img src="/images/thumbnails/wordsthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Words</span></div>
       </div>
       <div class="film-card" onclick="showFilm('distant')">
-        <img src="images/thumbnails/distantthumb.jpg" alt="">
+        <img src="/images/thumbnails/distantthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Distant</span></div>
       </div>
       <div class="film-card" onclick="showFilm('whispersofthesea')">
-        <img src="images/thumbnails/whispersoftheseathumb.jpg" alt="">
+        <img src="/images/thumbnails/whispersoftheseathumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">Whispers of the Sea</span></div>
       </div>
       <div class="film-card" onclick="showFilm('whentheearthturnsblue')">
-        <img src="images/thumbnails/whentheearthturnsbluethumb.jpg" alt="">
+        <img src="/images/thumbnails/whentheearthturnsbluethumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
       </div>
       <div class="film-card" onclick="showFilm('afterthepass')">
-        <img src="images/thumbnails/afterthepassthumb.jpg" alt="">
+        <img src="/images/thumbnails/afterthepassthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">After the Pass</span></div>
       </div>
       <div class="film-card" onclick="showFilm('inthepainting')">
-        <img src="images/thumbnails/inthepaintingthumb.jpg" alt="">
+        <img src="/images/thumbnails/inthepaintingthumb.jpg" alt="">
         <div class="film-card-overlay"><span class="film-card-title">In the Painting</span></div>
       </div>
     </div>
@@ -389,7 +387,7 @@
 
   <div class="page" id="page-about">
     <div class="about-img">
-      <img src="images/site/portrait.jpg" alt="Yifan Xiao">
+      <img src="/images/site/portrait.jpg" alt="Yifan Xiao">
     </div>
     <div class="about-content">
       <div class="about-bio">Yifan Xiao is a filmmaker and Graduate Film MFA candidate at NYU Tisch. Working across directing and cinematography, his films have screened internationally.</div>
@@ -397,96 +395,94 @@
   </div>
 
   <script>
-    // 首页图片及顺序 (按照你的要求，加入了子文件夹路径)
     const HOME_SLIDES = [
-      'images/site/homepage1.jpg',
-      'images/stills/woksape/woksape8.jpg',
-      'images/stills/glance/glance1.jpg',
-      'images/stills/distant/distant1.jpg',
-      'images/stills/personalmessage/personalmessage1.jpg',
-      'images/stills/endlesssleep/endlesssleep2.jpg',
-      'images/stills/tachaskan/tachaskan1.jpg',
-      'images/stills/woksape/woksape1.jpg',
-      'images/stills/woksape/woksape5.jpg',
-      'images/stills/whispersofthesea/whispersofthesea1.jpg',
-      'images/stills/inthepainting/inthepainting5.jpg',
-      'images/stills/woksape/woksape7.jpg',
-      'images/stills/woksape/woksape9.jpg',
-      'images/stills/words/words3.jpg',
-      'images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg'
+      '/images/site/homepage1.jpg',
+      '/images/stills/woksape/woksape8.jpg',
+      '/images/stills/glance/glance1.jpg',
+      '/images/stills/distant/distant1.jpg',
+      '/images/stills/personalmessage/personalmessage1.jpg',
+      '/images/stills/endlesssleep/endlesssleep2.jpg',
+      '/images/stills/tachaskan/tachaskan1.jpg',
+      '/images/stills/woksape/woksape1.jpg',
+      '/images/stills/woksape/woksape5.jpg',
+      '/images/stills/whispersofthesea/whispersofthesea1.jpg',
+      '/images/stills/inthepainting/inthepainting5.jpg',
+      '/images/stills/woksape/woksape7.jpg',
+      '/images/stills/woksape/woksape9.jpg',
+      '/images/stills/words/words3.jpg',
+      '/images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg'
     ];
 
-    // 电影数据结构 (剧照路径现在指向子文件夹)
     const FILMS = {
       'woksapewisdom': { 
         title: 'Woksape: Wisdom', 
         role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['images/stills/woksape/woksape1.jpg','images/stills/woksape/woksape5.jpg','images/stills/woksape/woksape7.jpg','images/stills/woksape/woksape8.jpg','images/stills/woksape/woksape9.jpg'] 
+        stills: ['/images/stills/woksape/woksape1.jpg','/images/stills/woksape/woksape5.jpg','/images/stills/woksape/woksape7.jpg','/images/stills/woksape/woksape8.jpg','/images/stills/woksape/woksape9.jpg'] 
       },
       'glance': { 
         title: 'Glance', 
         role: 'DIRECTOR / DP', 
-        stills: ['images/stills/glance/glance1.jpg','images/stills/glance/glance2.jpg','images/stills/glance/glance3.jpg'] 
+        stills: ['/images/stills/glance/glance1.jpg','/images/stills/glance/glance2.jpg','/images/stills/glance/glance3.jpg'] 
       },
       'words': { 
         title: 'Words', 
         role: 'DIRECTOR', 
-        stills: ['images/stills/words/words1.jpg','images/stills/words/words2.jpg','images/stills/words/words3.jpg'] 
+        stills: ['/images/stills/words/words1.jpg','/images/stills/words/words2.jpg','/images/stills/words/words3.jpg'] 
       },
       'distant': { 
         title: 'Distant', 
         role: 'DIRECTOR', 
-        stills: ['images/stills/distant/distant1.jpg'] 
+        stills: ['/images/stills/distant/distant1.jpg'] 
       },
       'thereisnowind': { 
         title: 'There Is No Wind', 
         role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['images/stills/thereisnowind/thereisnowind1.jpg'] 
+        stills: ['/images/stills/thereisnowind/thereisnowind1.jpg'] 
       },
       'tachaskan': { 
         title: 'Tacha Skan', 
         role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['images/stills/tachaskan/tachaskan1.jpg'] 
+        stills: ['/images/stills/tachaskan/tachaskan1.jpg'] 
       },
       'personalmessage': { 
         title: 'Personal Message', 
         role: 'DIRECTOR OF PHOTOGRAPHY', 
-        stills: ['images/stills/personalmessage/personalmessage1.jpg'] 
+        stills: ['/images/stills/personalmessage/personalmessage1.jpg'] 
       },
       'endlesssleep': { 
         title: 'Endless Sleep', 
         role: 'DIRECTOR / DP', 
-        stills: ['images/stills/endlesssleep/endlesssleep1.jpg','images/stills/endlesssleep/endlesssleep2.jpg'] 
+        stills: ['/images/stills/endlesssleep/endlesssleep1.jpg','/images/stills/endlesssleep/endlesssleep2.jpg'] 
       },
       'recital': { 
         title: 'Recital', 
         role: 'DIRECTOR / DP', 
-        stills: ['images/stills/recital/recital1.jpg'] 
+        stills: ['/images/stills/recital/recital1.jpg'] 
       },
       'deadline': { 
         title: 'Deadline', 
         role: 'DIRECTOR / DP', 
-        stills: ['images/stills/deadline/deadline1.jpg'] 
+        stills: ['/images/stills/deadline/deadline1.jpg'] 
       },
       'whispersofthesea': { 
         title: 'Whispers of the Sea', 
         role: 'DIRECTOR', 
-        stills: ['images/stills/whispersofthesea/whispersofthesea1.jpg'] 
+        stills: ['/images/stills/whispersofthesea/whispersofthesea1.jpg'] 
       },
       'whentheearthturnsblue': { 
         title: 'When the Earth Turns Blue', 
         role: 'DIRECTOR', 
-        stills: ['images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg'] 
+        stills: ['/images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg'] 
       },
       'afterthepass': { 
         title: 'After the Pass', 
         role: 'DIRECTOR', 
-        stills: ['images/stills/afterthepass/afterthepass1.jpg'] 
+        stills: ['/images/stills/afterthepass/afterthepass1.jpg'] 
       },
       'inthepainting': { 
         title: 'In the Painting', 
         role: 'DIRECTOR', 
-        stills: ['images/stills/inthepainting/inthepainting1.jpg','images/stills/inthepainting/inthepainting5.jpg'] 
+        stills: ['/images/stills/inthepainting/inthepainting1.jpg','/images/stills/inthepainting/inthepainting5.jpg'] 
       }
     };
 
