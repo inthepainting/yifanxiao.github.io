@@ -475,17 +475,23 @@
       margin-top: 14px;
     }
 
+    /* 全局的剧照提示点样式 (包含电脑端和手机端) */
     .stills-dot {
       width: 4px; height: 4px;
       border-radius: 50%;
       background: var(--dim);
-      transition: background 0.2s;
+      /* 修改：为点点加上 transform 动画过渡 */
+      transition: background 0.2s, transform 0.2s;
       cursor: pointer;
       border: none;
       padding: 0;
     }
 
-    .stills-dot.active { background: var(--text); }
+    .stills-dot.active { 
+      background: var(--text); 
+      /* 修改：当前活动点稍微放大一点，克制且优雅 */
+      transform: scale(1.35); 
+    }
 
     /* ═══════════════════════════════
        ABOUT — elegant portrait layout
@@ -765,13 +771,13 @@
       .slide-arrow { display: none; }
       .still-arrow { display: none; }
 
-      /* 修改：Home dots 样式完全统一，位置安全上调 */
+      /* 修改：Home dots 再次大幅上移以避开较长图片（words3） */
       .home-dots {
         display: flex !important;
         justify-content: center;
         gap: 8px;
         position: absolute;
-        bottom: 24dvh; /* 贴近画面底部的位置 */
+        bottom: 36dvh; /* 修改：从24dvh大幅上移到了36dvh，如果你想更高可以改成40dvh */
         left: 0; right: 0;
         z-index: 50;
         pointer-events: none;
@@ -780,21 +786,23 @@
       }
 
       .home-dot {
-        width: 4px; height: 4px; /* 尺寸完全匹配电影剧照点 */
+        width: 4px; height: 4px; 
         border-radius: 50%;
-        background: var(--dim); /* 颜色完全匹配 */
-        transition: background 0.2s;
+        background: var(--dim); 
+        /* 修改：增加 transform 动画，保证和剧照相同的动画逻辑 */
+        transition: background 0.2s, transform 0.2s;
         border: none;
         padding: 0;
         pointer-events: all;
         cursor: pointer;
         flex-shrink: 0;
-        box-shadow: none; /* 去除额外阴影 */
+        box-shadow: none; 
       }
 
       .home-dot.active {
         background: var(--text);
-        transform: none; /* 取消放大动画，保持统一 */
+        /* 修改：同样加上克制的放大动画 */
+        transform: scale(1.35); 
       }
 
       #page-films { padding-bottom: 160px; }
@@ -1182,7 +1190,6 @@
     let stillIdx = 0;
     let stillCount = 0;
 
-    // Desktop smooth jump
     const _goToStill = function(idx) {
       const slides = document.querySelectorAll('#stills-track-inner .still-slide');
       const dots   = document.querySelectorAll('.stills-dot');
@@ -1434,7 +1441,6 @@
         slideIdx = targetIdx;
         updateHomeDots();
 
-        // 动画结束后，无缝重置CSS以恢复10秒叠画
         setTimeout(() => {
           slides.forEach((s, i) => {
             s.style.transition = 'none'; 
@@ -1447,7 +1453,7 @@
               s.classList.remove('active');
             }
           });
-          void slides[0].offsetHeight; // force reflow
+          void slides[0].offsetHeight; 
           slides.forEach(s => s.style.transition = '');
           resetSlideTimer();
         }, time * 1000);
@@ -1498,7 +1504,6 @@
         slides[stillIdx].classList.add('active');
         if (dots[stillIdx]) dots[stillIdx].classList.add('active');
 
-        /* 修改：剧照底层的真正无缝物理循环算法 */
         if (isNextWrap) {
           const clone = slides[0].cloneNode(true); 
           inner.appendChild(clone); 
