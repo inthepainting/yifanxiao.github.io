@@ -673,6 +673,7 @@
     /* Hamburger hidden on desktop */
     .hamburger { display: none; }
     .mobile-menu { display: none; }
+    .home-dots { display: none; }
 
     /* ═══════════════════════════════
        MOBILE — all fixes
@@ -762,10 +763,39 @@
         object-position: center 40%;
       }
 
-      /* Films page: extra bottom padding — applies to BOTH grids */
-      #page-films { padding-bottom: 0; }
+      /* Hide arrows on mobile — swipe instead */
+      .slide-arrow { display: none; }
+      .still-arrow { display: none; }
+
+      /* Home dots — visible mobile only */
+      .home-dots {
+        display: flex;
+        justify-content: center;
+        gap: 7px;
+        position: absolute;
+        bottom: 18px;
+        left: 0; right: 0;
+        z-index: 20;
+        pointer-events: none;
+      }
+
+      .home-dot {
+        width: 4px; height: 4px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.35);
+        transition: background 0.25s;
+        border: none;
+        padding: 0;
+        pointer-events: all;
+        cursor: pointer;
+      }
+
+      .home-dot.active { background: rgba(255,255,255,0.9); }
+
+      /* Films page: reliable bottom space for both tabs */
+      #page-films { padding-bottom: 160px; }
       .film-grid {
-        padding-bottom: 80px;
+        padding-bottom: 0;
       }
       .film-grid.active {
         grid-template-columns: 1fr 1fr;
@@ -799,7 +829,7 @@
         align-items: flex-start;
       }
       .about-portrait-wrap { width: 52%; max-width: none; }
-      .about-bio { text-align: justify; }
+      .about-bio { text-align: left; }
 
       /* Films header */
       .films-header { padding: 24px 18px 18px; }
@@ -876,6 +906,7 @@
           <path d="M2 2L19 19L2 36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
+      <div class="home-dots" id="home-dots"></div>
     </div>
   </div>
 
@@ -1259,16 +1290,36 @@
     }
 
     /* ══════════════════════════════
-       HOME SLIDESHOW
+       HOME SLIDESHOW — dots + swipe
     ══════════════════════════════ */
     let slideIdx = 0;
     let slideTimer;
+
+    // Build home dots once
+    (function buildHomeDots() {
+      const slides = document.querySelectorAll('#home-slideshow .slide');
+      const container = document.getElementById('home-dots');
+      slides.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'home-dot' + (i === 0 ? ' active' : '');
+        d.setAttribute('aria-label', 'Slide ' + (i + 1));
+        d.onclick = () => { goToSlide(i); resetSlideTimer(); };
+        container.appendChild(d);
+      });
+    })();
+
+    function updateHomeDots() {
+      document.querySelectorAll('.home-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === slideIdx);
+      });
+    }
 
     function goToSlide(idx) {
       const slides = document.querySelectorAll('#home-slideshow .slide');
       slides.forEach(s => s.classList.remove('active'));
       slideIdx = (idx + slides.length) % slides.length;
       slides[slideIdx].classList.add('active');
+      updateHomeDots();
     }
 
     function moveSlide(dir) {
@@ -1282,6 +1333,28 @@
     }
 
     resetSlideTimer();
+
+    // Swipe on home slideshow (mobile)
+    (function() {
+      const el = document.getElementById('home-slideshow');
+      let tx = 0;
+      el.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+      el.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 45) { moveSlide(dx < 0 ? 1 : -1); }
+      }, { passive: true });
+    })();
+
+    // Swipe on film stills (mobile)
+    (function() {
+      const el = document.getElementById('stills-track');
+      let tx = 0;
+      el.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+      el.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 45) { moveStill(dx < 0 ? 1 : -1); }
+      }, { passive: true });
+    })();
 
     /* ══════════════════════════════
        REEL
