@@ -661,22 +661,134 @@
     }
 
     /* ═══════════════════════════════
-       RESPONSIVE
+       RESPONSIVE — tablet
     ═══════════════════════════════ */
     @media (max-width: 860px) {
-      header { padding: 0 24px; }
-      nav { gap: 20px; }
       .film-grid.active { grid-template-columns: 1fr 1fr; }
       .film-page-inner, .films-header { padding-left: 24px; padding-right: 24px; }
       #page-about.active { flex-direction: column; padding: 40px 24px; gap: 40px; }
       .about-portrait-wrap { width: 60%; max-width: none; }
-      #page-contact { padding: 48px 24px 60px; }
-      .form-row { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 560px) {
-      .film-grid.active { grid-template-columns: 1fr; }
-      .logo-role { display: none; }
+    /* Hamburger hidden on desktop */
+    .hamburger { display: none; }
+    .mobile-menu { display: none; }
+
+    /* ═══════════════════════════════
+       MOBILE — all fixes
+    ═══════════════════════════════ */
+    @media (max-width: 640px) {
+
+      /* Header */
+      header {
+        padding: 0 18px;
+        background: rgba(9,9,8,0.80);
+        backdrop-filter: blur(8px);
+      }
+
+      /* Logo: single row, no wrap */
+      .logo { flex-direction: column; gap: 4px; }
+      .logo-name {
+        font-size: 12.5px;
+        white-space: nowrap;
+        letter-spacing: 0.18em;
+      }
+      .logo-role {
+        font-size: 7.5px;
+        letter-spacing: 0.15em;
+        display: block;
+      }
+
+      /* Hide desktop nav, show hamburger */
+      nav { display: none; }
+
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px 8px;
+        z-index: 1100;
+      }
+
+      .hamburger span {
+        display: block;
+        width: 22px;
+        height: 1.5px;
+        background: rgba(255,255,255,0.85);
+        transition: opacity 0.2s;
+        border-radius: 1px;
+      }
+
+      /* Mobile menu overlay */
+      .mobile-menu {
+        position: fixed;
+        inset: 0;
+        background: rgba(9,9,8,0.97);
+        z-index: 900;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+      }
+
+      .mobile-menu.open { display: flex !important; }
+
+      .mobile-menu-btn {
+        background: none;
+        border: none;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        color: rgba(255,255,255,0.55);
+        cursor: pointer;
+        padding: 22px 40px;
+        width: 100%;
+        text-align: center;
+        transition: color 0.2s;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .mobile-menu-btn:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
+      .mobile-menu-btn:hover,
+      .mobile-menu-btn:active { color: #fff; }
+
+      /* Home: full image visible, letterbox OK */
+      .slide img {
+        object-fit: contain;
+      }
+
+      /* Films page: extra bottom padding */
+      #page-films { padding-bottom: 0; }
+      .film-grid.active {
+        grid-template-columns: 1fr 1fr;
+        padding-bottom: 60px;
+      }
+
+      /* Film individual page */
+      .film-page-inner { padding: 28px 18px 60px; }
+
+      /* Contact: top-align and lots of bottom room */
+      #page-contact {
+        padding: 40px 18px 120px;
+        justify-content: flex-start;
+      }
+      .form-row { grid-template-columns: 1fr; gap: 24px; }
+
+      /* About */
+      #page-about.active {
+        flex-direction: column;
+        padding: 32px 18px 60px;
+        gap: 28px;
+        align-items: flex-start;
+      }
+      .about-portrait-wrap { width: 72%; max-width: none; }
+
+      /* Films header */
+      .films-header { padding: 24px 18px 18px; }
     }
   </style>
 </head>
@@ -707,7 +819,20 @@
       <button class="nav-btn" id="nav-about"   onclick="showPage('about')">ABOUT</button>
       <button class="nav-btn" id="nav-contact" onclick="showPage('contact')">CONTACT</button>
     </nav>
+    <!-- Hamburger — mobile only -->
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </header>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-menu-btn" onclick="mobileNav('home')">HOME</button>
+    <button class="mobile-menu-btn" onclick="mobileNav('reel')">REEL</button>
+    <button class="mobile-menu-btn" onclick="mobileNav('films')">FILMS</button>
+    <button class="mobile-menu-btn" onclick="mobileNav('about')">ABOUT</button>
+    <button class="mobile-menu-btn" onclick="mobileNav('contact')">CONTACT</button>
+  </div>
 
   <div class="page active" id="page-home">
     <div class="slideshow" id="home-slideshow">
@@ -837,7 +962,7 @@
 
   <div class="page" id="page-film">
     <div class="film-page-inner">
-      <button class="film-back" onclick="showPage('films')">← FILMS</button>
+      <button class="film-back" onclick="backToFilms()">← FILMS</button>
       <div class="film-title-block">
         <div class="film-title-name" id="film-name"></div>
         <div class="film-title-role" id="film-role"></div>
@@ -956,7 +1081,15 @@
     /* ══════════════════════════════
        PAGE NAVIGATION
     ══════════════════════════════ */
+    let filmsScrollPos = 0; // remember scroll position in films page
+
     function showPage(name) {
+      // Save films scroll position before leaving
+      const filmsPage = document.getElementById('page-films');
+      if (filmsPage.classList.contains('active')) {
+        filmsScrollPos = filmsPage.scrollTop;
+      }
+
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       const page = document.getElementById('page-' + name);
@@ -967,7 +1100,40 @@
       const btn = document.getElementById('nav-' + name);
       if (btn) btn.classList.add('active');
       page.scrollTop = 0;
-      filmsDrop.classList.remove('open');
+      if (filmsDrop) filmsDrop.classList.remove('open');
+    }
+
+    // Go back to films and restore scroll position
+    function backToFilms() {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const page = document.getElementById('page-films');
+      page.classList.add('active');
+      void page.offsetWidth;
+      page.classList.add('fade-in');
+      const btn = document.getElementById('nav-films');
+      if (btn) btn.classList.add('active');
+      // Restore scroll after paint
+      requestAnimationFrame(() => { page.scrollTop = filmsScrollPos; });
+      if (filmsDrop) filmsDrop.classList.remove('open');
+    }
+
+    /* ══════════════════════════════
+       HAMBURGER MENU (mobile)
+    ══════════════════════════════ */
+    function toggleMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('open');
+    }
+
+    function mobileNav(name) {
+      document.getElementById('mobile-menu').classList.remove('open');
+      // On mobile, Films goes directly to films page (no dropdown)
+      showPage(name);
+      if (name === 'films') {
+        // Always reset to cinematography tab on fresh visit
+        switchTab('cinema');
+      }
     }
 
     /* ══════════════════════════════
@@ -979,6 +1145,12 @@
     function showFilm(slug) {
       const film = FILMS[slug];
       if (!film) return;
+
+      // Save films scroll position
+      const filmsPage = document.getElementById('page-films');
+      if (filmsPage.classList.contains('active')) {
+        filmsScrollPos = filmsPage.scrollTop;
+      }
 
       document.getElementById('film-name').textContent = film.title;
       document.getElementById('film-role').textContent = film.role;
@@ -1057,17 +1229,20 @@
     const filmsDrop = document.getElementById('films-drop');
     let dropTimer;
 
-    filmsNav.addEventListener('mouseenter', () => {
-      clearTimeout(dropTimer);
-      filmsDrop.classList.add('open');
-    });
-    filmsNav.addEventListener('mouseleave', () => {
-      dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 200);
-    });
-    filmsDrop.addEventListener('mouseenter', () => clearTimeout(dropTimer));
-    filmsDrop.addEventListener('mouseleave', () => {
-      dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 200);
-    });
+    // Only enable hover dropdown on non-touch devices
+    if (window.matchMedia('(hover: hover)').matches) {
+      filmsNav.addEventListener('mouseenter', () => {
+        clearTimeout(dropTimer);
+        filmsDrop.classList.add('open');
+      });
+      filmsNav.addEventListener('mouseleave', () => {
+        dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 200);
+      });
+      filmsDrop.addEventListener('mouseenter', () => clearTimeout(dropTimer));
+      filmsDrop.addEventListener('mouseleave', () => {
+        dropTimer = setTimeout(() => filmsDrop.classList.remove('open'), 200);
+      });
+    }
 
     /* ══════════════════════════════
        HOME SLIDESHOW
