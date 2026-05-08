@@ -131,7 +131,7 @@
       cursor: pointer;
       transition: color 0.15s, background 0.15s;
       width: 100%;
-      text-transform: uppercase; /* 将下拉菜单的电影名转为大写 */
+      text-transform: uppercase;
     }
 
     .drop-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
@@ -326,7 +326,6 @@
       opacity: 0.72;
     }
 
-    /* Title always visible at bottom-left */
     .film-card-overlay {
       position: absolute;
       inset: 0;
@@ -343,7 +342,7 @@
       letter-spacing: 0.08em;
       color: rgba(255,255,255,0.82);
       transition: color 0.25s, transform 0.25s;
-      text-transform: uppercase; /* 将封面图上的电影名转为大写 */
+      text-transform: uppercase;
     }
 
     .film-card:hover .film-card-title {
@@ -386,7 +385,7 @@
       color: var(--text);
       margin-bottom: 9px;
       line-height: 1.1;
-      text-transform: uppercase; /* 将单独页面里的电影名转为大写 */
+      text-transform: uppercase;
     }
 
     .film-title-role {
@@ -402,9 +401,8 @@
     .stills-track {
       position: relative;
       width: 100%;
-      background: var(--bg); /* 修改：与网站整体背景颜色完全一致 */
+      background: var(--bg);
       overflow: hidden;
-      /* height adapts to image via padding-bottom trick or flex */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -425,7 +423,6 @@
 
     .still-slide.active { display: flex; }
 
-    /* Stills: show at natural size, no crop */
     .still-slide img {
       max-width: 100%;
       max-height: 75vh;
@@ -446,7 +443,6 @@
       color: #333;
     }
 
-    /* Stills arrows — inside track wrapper, centered vertically */
     .stills-arrows {
       position: absolute;
       top: 0; bottom: 0;
@@ -700,7 +696,7 @@
           <button class="drop-btn" onclick="showFilm('woksape-wisdom')">Woksape: Wisdom</button>
           <button class="drop-btn" onclick="showFilm('there-is-no-wind')">There Is No Wind</button>
           <button class="drop-btn" onclick="showFilm('glance')">Glance</button>
-          <button class="drop-btn" onclick="showFilm('tacha-skan')">Tacha Skan</button>
+          <button class="drop-btn" onclick="showFilm('thacha-skan')">Thacha Skan</button>
           <button class="drop-btn" onclick="showFilm('personal-message')">Personal Message</button>
           <button class="drop-btn" onclick="showFilm('words')">Words</button>
           <button class="drop-btn" onclick="showFilm('distant')">Distant</button>
@@ -721,7 +717,7 @@
       <div class="slide"><img src="images/stills/distant/distant1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/personalmessage/personalmessage1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/endlesssleep/endlesssleep2.jpg" alt=""></div>
-      <div class="slide"><img src="images/stills/tachaskan/tachaskan1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/thachaskan/thachaskan1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/woksape/woksape1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/woksape/woksape5.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/whispersofthesea/whispersofthesea1.jpg" alt=""></div>
@@ -773,8 +769,9 @@
         <img src="images/thumbnails/thereisnowindthumb.jpg" alt="There Is No Wind">
         <div class="film-card-overlay"><span class="film-card-title">There Is No Wind</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('tacha-skan')">
-        <img src="images/thumbnails/tachaskanthumb.jpg" alt="Tacha Skan"> <div class="film-card-overlay"><span class="film-card-title">Tacha Skan</span></div>
+      <div class="film-card" onclick="showFilm('thacha-skan')">
+        <img src="images/thumbnails/thachaskanthumb.jpg" alt="Thacha Skan">
+        <div class="film-card-overlay"><span class="film-card-title">Thacha Skan</span></div>
       </div>
       <div class="film-card" onclick="showFilm('personal-message')">
         <img src="images/thumbnails/personalmessagethumb.jpg" alt="Personal Message">
@@ -812,7 +809,8 @@
         <div class="film-card-overlay"><span class="film-card-title">Whispers of the Sea</span></div>
       </div>
       <div class="film-card" onclick="showFilm('when-the-earth-turns-blue')">
-        <img src="images/thumbnails/whentheearthturnsbluethumb.jpg" alt="When the Earth Turns Blue"> <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
+        <img src="images/thumbnails/whentheearthturnsbluethumb.jpg" alt="When the Earth Turns Blue">
+        <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
       </div>
       <div class="film-card" onclick="showFilm('after-the-pass')">
         <img src="images/thumbnails/afterthepassthumb.jpg" alt="After the Pass">
@@ -918,7 +916,6 @@
 
     /* ══════════════════════════════
        FILM DATA
-       stills: array of image paths (natural size, no crop)
     ══════════════════════════════ */
     function stills(folder, prefix, count) {
       return Array.from({length: count}, (_, i) =>
@@ -930,8 +927,8 @@
         stills: stills('woksape','woksape',10) },
       'there-is-no-wind':          { title: 'There Is No Wind',          role: 'DIRECTOR OF PHOTOGRAPHY',
         stills: [] },
-      'tacha-skan':                { title: 'Tacha Skan',                role: 'DIRECTOR OF PHOTOGRAPHY',
-        stills: stills('tachaskan','tachaskan',4) }, /* 修改：数量从5改为4 */
+      'thacha-skan':               { title: 'Thacha Skan',               role: 'DIRECTOR OF PHOTOGRAPHY',
+        stills: stills('thachaskan','thachaskan',4) }, 
       'personal-message':          { title: 'Personal Message',          role: 'DIRECTOR OF PHOTOGRAPHY',
         stills: stills('personalmessage','personalmessage',5) },
       'endless-sleep':             { title: 'Endless Sleep',             role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
@@ -994,7 +991,6 @@
       stillCount = film.stills.length;
 
       if (stillCount === 0) {
-        // No stills yet
         const ph = document.createElement('div');
         ph.className = 'still-slide active';
         ph.innerHTML = '<div class="still-ph">STILLS COMING SOON</div>';
@@ -1117,8 +1113,6 @@
 
     /* ══════════════════════════════
        CONTACT FORM
-       Uses Formspree to deliver emails to xyifanxiao@gmail.com
-       Instructions: formspree.io → New Form → copy ID → paste above
     ══════════════════════════════ */
     document.getElementById('contact-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1129,15 +1123,6 @@
       const formData = new FormData(e.target);
 
       try {
-        if (FORMSPREE === 'YOUR_FORM_ID') {
-          // Fallback: open mail client
-          const f = formData.get('first_name'), l = formData.get('last_name');
-          const em = formData.get('email'), s = formData.get('subject'), m = formData.get('message');
-          window.location.href = `mailto:xyifanxiao@gmail.com?subject=${encodeURIComponent(s)}&body=${encodeURIComponent('From: '+f+' '+l+'\nEmail: '+em+'\n\n'+m)}`;
-          btn.textContent = 'SEND';
-          btn.disabled = false;
-          return;
-        }
         const res = await fetch(`https://formspree.io/f/${FORMSPREE}`, {
           method: 'POST', body: formData,
           headers: { 'Accept': 'application/json' }
