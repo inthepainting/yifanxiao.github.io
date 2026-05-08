@@ -131,6 +131,7 @@
       cursor: pointer;
       transition: color 0.15s, background 0.15s;
       width: 100%;
+      text-transform: uppercase; /* 将下拉菜单的电影名转为大写 */
     }
 
     .drop-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
@@ -168,7 +169,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      background: #0d0d0c;
+      background: var(--bg);
       overflow: hidden;
     }
 
@@ -342,6 +343,7 @@
       letter-spacing: 0.08em;
       color: rgba(255,255,255,0.82);
       transition: color 0.25s, transform 0.25s;
+      text-transform: uppercase; /* 将封面图上的电影名转为大写 */
     }
 
     .film-card:hover .film-card-title {
@@ -384,6 +386,7 @@
       color: var(--text);
       margin-bottom: 9px;
       line-height: 1.1;
+      text-transform: uppercase; /* 将单独页面里的电影名转为大写 */
     }
 
     .film-title-role {
@@ -399,7 +402,7 @@
     .stills-track {
       position: relative;
       width: 100%;
-      background: #0d0d0c;
+      background: var(--bg); /* 修改：与网站整体背景颜色完全一致 */
       overflow: hidden;
       /* height adapts to image via padding-bottom trick or flex */
       display: flex;
@@ -683,7 +686,6 @@
 </head>
 <body>
 
-  <!-- ═══ HEADER ═══ -->
   <header>
     <div class="logo" onclick="showPage('home')">
       <div class="logo-name">YIFAN XIAO</div>
@@ -711,7 +713,6 @@
     </nav>
   </header>
 
-  <!-- ═══ HOME ═══ -->
   <div class="page active" id="page-home">
     <div class="slideshow" id="home-slideshow">
       <div class="slide active"><img src="images/site/homepage1.jpg" alt=""></div>
@@ -743,7 +744,6 @@
     </div>
   </div>
 
-  <!-- ═══ REEL ═══ -->
   <div class="page" id="page-reel">
     <div style="width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;">
       <div class="reel-wrap" id="reel-wrap">
@@ -758,14 +758,12 @@
     </div>
   </div>
 
-  <!-- ═══ FILMS GALLERY ═══ -->
   <div class="page" id="page-films">
     <div class="films-header">
       <button class="toggle-btn active" id="toggle-cinema" onclick="switchTab('cinema')">CINEMATOGRAPHY</button>
       <button class="toggle-btn"        id="toggle-direct" onclick="switchTab('direct')">DIRECTING</button>
     </div>
 
-    <!-- Cinematography -->
     <div class="film-grid active" id="grid-cinema">
       <div class="film-card" onclick="showFilm('woksape-wisdom')">
         <img src="images/thumbnails/woksapethumb.jpg" alt="Woksape: Wisdom">
@@ -776,8 +774,7 @@
         <div class="film-card-overlay"><span class="film-card-title">There Is No Wind</span></div>
       </div>
       <div class="film-card" onclick="showFilm('tacha-skan')">
-        <img src="images/thumbnails/tacaskanthumb.jpg" alt="Tacha Skan">
-        <div class="film-card-overlay"><span class="film-card-title">Tacha Skan</span></div>
+        <img src="images/thumbnails/tachaskanthumb.jpg" alt="Tacha Skan"> <div class="film-card-overlay"><span class="film-card-title">Tacha Skan</span></div>
       </div>
       <div class="film-card" onclick="showFilm('personal-message')">
         <img src="images/thumbnails/personalmessagethumb.jpg" alt="Personal Message">
@@ -797,7 +794,6 @@
       </div>
     </div>
 
-    <!-- Directing -->
     <div class="film-grid" id="grid-direct">
       <div class="film-card" onclick="showFilm('glance')">
         <img src="images/thumbnails/glancethumb.jpg" alt="Glance">
@@ -816,8 +812,7 @@
         <div class="film-card-overlay"><span class="film-card-title">Whispers of the Sea</span></div>
       </div>
       <div class="film-card" onclick="showFilm('when-the-earth-turns-blue')">
-        <img src="images/thumbnails/whentheearthturnsblue thumb.jpg" alt="When the Earth Turns Blue">
-        <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
+        <img src="images/thumbnails/whentheearthturnsbluethumb.jpg" alt="When the Earth Turns Blue"> <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
       </div>
       <div class="film-card" onclick="showFilm('after-the-pass')">
         <img src="images/thumbnails/afterthepassthumb.jpg" alt="After the Pass">
@@ -842,7 +837,6 @@
     </div>
   </div>
 
-  <!-- ═══ INDIVIDUAL FILM ═══ -->
   <div class="page" id="page-film">
     <div class="film-page-inner">
       <button class="film-back" onclick="showPage('films')">← FILMS</button>
@@ -853,8 +847,7 @@
       <div class="stills-carousel" id="stills-carousel">
         <div class="stills-track" id="stills-track">
           <div class="stills-track-inner" id="stills-track-inner">
-            <!-- slides injected by JS -->
-          </div>
+            </div>
           <div class="stills-arrows">
             <button class="still-arrow" id="still-prev" onclick="moveStill(-1)" aria-label="Previous">
               <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
@@ -873,7 +866,6 @@
     </div>
   </div>
 
-  <!-- ═══ ABOUT ═══ -->
   <div class="page" id="page-about">
     <div class="about-portrait-wrap">
       <img src="images/site/portrait.jpg" alt="Yifan Xiao"
@@ -886,7 +878,6 @@
     </div>
   </div>
 
-  <!-- ═══ CONTACT ═══ -->
   <div class="page" id="page-contact">
     <div class="contact-label">CONTACT</div>
     <a class="contact-email" href="mailto:xyifanxiao@gmail.com">xyifanxiao@gmail.com</a>
@@ -940,7 +931,7 @@
       'there-is-no-wind':          { title: 'There Is No Wind',          role: 'DIRECTOR OF PHOTOGRAPHY',
         stills: [] },
       'tacha-skan':                { title: 'Tacha Skan',                role: 'DIRECTOR OF PHOTOGRAPHY',
-        stills: stills('tachaskan','tachaskan',5) },
+        stills: stills('tachaskan','tachaskan',4) }, /* 修改：数量从5改为4 */
       'personal-message':          { title: 'Personal Message',          role: 'DIRECTOR OF PHOTOGRAPHY',
         stills: stills('personalmessage','personalmessage',5) },
       'endless-sleep':             { title: 'Endless Sleep',             role: 'DIRECTOR / DIRECTOR OF PHOTOGRAPHY',
