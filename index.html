@@ -475,12 +475,10 @@
       margin-top: 14px;
     }
 
-    /* 全局的剧照提示点样式 (包含电脑端和手机端) */
     .stills-dot {
       width: 4px; height: 4px;
       border-radius: 50%;
       background: var(--dim);
-      /* 修改：为点点加上 transform 动画过渡 */
       transition: background 0.2s, transform 0.2s;
       cursor: pointer;
       border: none;
@@ -489,7 +487,6 @@
 
     .stills-dot.active { 
       background: var(--text); 
-      /* 修改：当前活动点稍微放大一点，克制且优雅 */
       transform: scale(1.35); 
     }
 
@@ -771,13 +768,13 @@
       .slide-arrow { display: none; }
       .still-arrow { display: none; }
 
-      /* 修改：Home dots 再次大幅上移以避开较长图片（words3） */
+      /* 修改：Home dots 位置微调到 35dvh */
       .home-dots {
         display: flex !important;
         justify-content: center;
         gap: 8px;
         position: absolute;
-        bottom: 32dvh; /* 修改：从24dvh大幅上移到了32dvh，如果你想更高可以改成40dvh */
+        bottom: 35dvh; 
         left: 0; right: 0;
         z-index: 50;
         pointer-events: none;
@@ -789,7 +786,6 @@
         width: 4px; height: 4px; 
         border-radius: 50%;
         background: var(--dim); 
-        /* 修改：增加 transform 动画，保证和剧照相同的动画逻辑 */
         transition: background 0.2s, transform 0.2s;
         border: none;
         padding: 0;
@@ -801,7 +797,6 @@
 
       .home-dot.active {
         background: var(--text);
-        /* 修改：同样加上克制的放大动画 */
         transform: scale(1.35); 
       }
 
@@ -894,19 +889,25 @@
     <div class="slideshow" id="home-slideshow">
       <div class="slide active"><img src="images/site/homepage1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/woksape/woksape8.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/thereisnowind/thereisnowind3.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/glance/glance1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/distant/distant1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/personalmessage/personalmessage1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/woksape/woksape2.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/thereisnowind/thereisnowind5.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/endlesssleep/endlesssleep2.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/thachaskan/thachaskan1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/woksape/woksape1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/woksape/woksape5.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/whispersofthesea/whispersofthesea1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/thereisnowind/thereisnowind1.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/inthepainting/inthepainting5.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/woksape/woksape7.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/woksape/woksape9.jpg" alt=""></div>
-      <div class="slide"><img src="images/stills/words/words3.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/thereisnowind/thereisnowind4.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/thereisnowind/thereisnowind2.jpg" alt=""></div>
       <div class="slide"><img src="images/stills/whentheearthturnsblue/whentheearthturnsblue1.jpg" alt=""></div>
+      <div class="slide"><img src="images/stills/thereisnowind/thereisnowind6.jpg" alt=""></div>
 
       <button class="slide-arrow left" onclick="moveSlide(-1)" aria-label="Previous">
         <svg width="22" height="38" viewBox="0 0 22 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1108,7 +1109,7 @@
       'woksape-wisdom':            { title: 'Woksape: Wisdom',           role: 'DIRECTOR OF PHOTOGRAPHY',
         stills: stills('woksape','woksape',10) },
       'there-is-no-wind':          { title: 'There Is No Wind',          role: 'DIRECTOR OF PHOTOGRAPHY',
-        stills: [] },
+        stills: stills('thereisnowind','thereisnowind',13) },
       'thacha-skan':               { title: 'Thacha Skan',               role: 'DIRECTOR OF PHOTOGRAPHY',
         stills: stills('thachaskan','thachaskan',4) }, 
       'personal-message':          { title: 'Personal Message',          role: 'DIRECTOR OF PHOTOGRAPHY',
@@ -1347,7 +1348,6 @@
 
     resetSlideTimer();
 
-    /* 修改：首页原生拖拽滑动算法 (仅手机生效，兼顾叠画) */
     (function() {
       const el = document.getElementById('home-slideshow');
       const slides = document.querySelectorAll('#home-slideshow .slide');
