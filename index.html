@@ -781,7 +781,6 @@
         object-position: center 40%;
       }
 
-      /* 修改：将手机端的 Reel 容器向上偏移，使其和首页图片高度对齐 */
       .reel-wrap {
         transform: translateY(-12dvh);
       }
@@ -868,29 +867,29 @@
 <body>
 
   <header>
-    <div class="logo" onclick="showPage('home')">
+    <div class="logo" onclick="location.hash='home'">
       <div class="logo-name">YIFAN XIAO</div>
       <div class="logo-role">DIRECTOR OF PHOTOGRAPHY</div>
     </div>
     <nav>
-      <button class="nav-btn active" id="nav-home"    onclick="showPage('home')">HOME</button>
-      <button class="nav-btn"        id="nav-reel"    onclick="showPage('reel')">REEL</button>
+      <button class="nav-btn active" id="nav-home"    onclick="location.hash='home'">HOME</button>
+      <button class="nav-btn"        id="nav-reel"    onclick="location.hash='reel'">REEL</button>
       <div class="films-nav" id="films-nav">
-        <button class="nav-btn" id="nav-films" onclick="showPage('films')">FILMS</button>
+        <button class="nav-btn" id="nav-films" onclick="location.hash='films'">FILMS</button>
         <div class="films-drop" id="films-drop">
-          <button class="drop-btn" onclick="showFilm('woksape-wisdom')">Woksape: Wisdom</button>
-          <button class="drop-btn" onclick="showFilm('there-is-no-wind')">There Is No Wind</button>
-          <button class="drop-btn" onclick="showFilm('glance')">Glance</button>
-          <button class="drop-btn" onclick="showFilm('thacha-skan')">Thacha Skan</button>
-          <button class="drop-btn" onclick="showFilm('personal-message')">Personal Message</button>
-          <button class="drop-btn" onclick="showFilm('words')">Words</button>
-          <button class="drop-btn" onclick="showFilm('distant')">Distant</button>
-          <button class="drop-btn" onclick="showFilm('endless-sleep')">Endless Sleep</button>
-          <button class="drop-btn" onclick="showFilm('recital')">Recital</button>
+          <button class="drop-btn" onclick="location.hash='film/woksape-wisdom'">Woksape: Wisdom</button>
+          <button class="drop-btn" onclick="location.hash='film/there-is-no-wind'">There Is No Wind</button>
+          <button class="drop-btn" onclick="location.hash='film/glance'">Glance</button>
+          <button class="drop-btn" onclick="location.hash='film/thacha-skan'">Thacha Skan</button>
+          <button class="drop-btn" onclick="location.hash='film/personal-message'">Personal Message</button>
+          <button class="drop-btn" onclick="location.hash='film/words'">Words</button>
+          <button class="drop-btn" onclick="location.hash='film/distant'">Distant</button>
+          <button class="drop-btn" onclick="location.hash='film/endless-sleep'">Endless Sleep</button>
+          <button class="drop-btn" onclick="location.hash='film/recital'">Recital</button>
         </div>
       </div>
-      <button class="nav-btn" id="nav-about"   onclick="showPage('about')">ABOUT</button>
-      <button class="nav-btn" id="nav-contact" onclick="showPage('contact')">CONTACT</button>
+      <button class="nav-btn" id="nav-about"   onclick="location.hash='about'">ABOUT</button>
+      <button class="nav-btn" id="nav-contact" onclick="location.hash='contact'">CONTACT</button>
     </nav>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -898,11 +897,11 @@
   </header>
 
   <div class="mobile-menu" id="mobile-menu">
-    <button class="mobile-menu-btn" onclick="mobileNav('home')">HOME</button>
-    <button class="mobile-menu-btn" onclick="mobileNav('reel')">REEL</button>
-    <button class="mobile-menu-btn" onclick="mobileNav('films')">FILMS</button>
-    <button class="mobile-menu-btn" onclick="mobileNav('about')">ABOUT</button>
-    <button class="mobile-menu-btn" onclick="mobileNav('contact')">CONTACT</button>
+    <button class="mobile-menu-btn" onclick="location.hash='home'">HOME</button>
+    <button class="mobile-menu-btn" onclick="location.hash='reel'">REEL</button>
+    <button class="mobile-menu-btn" onclick="location.hash='films'">FILMS</button>
+    <button class="mobile-menu-btn" onclick="location.hash='about'">ABOUT</button>
+    <button class="mobile-menu-btn" onclick="location.hash='contact'">CONTACT</button>
   </div>
 
   <div class="page active" id="page-home">
@@ -964,74 +963,74 @@
     </div>
 
     <div class="film-grid active" id="grid-cinema">
-      <div class="film-card" onclick="showFilm('woksape-wisdom')">
+      <div class="film-card" onclick="location.hash='film/woksape-wisdom'">
         <img src="images/thumbnails/woksapethumb.jpg" alt="Woksape: Wisdom">
         <div class="film-card-overlay"><span class="film-card-title">Woksape: Wisdom</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('there-is-no-wind')">
+      <div class="film-card" onclick="location.hash='film/there-is-no-wind'">
         <img src="images/thumbnails/thereisnowindthumb.jpg" alt="There Is No Wind">
         <div class="film-card-overlay"><span class="film-card-title">There Is No Wind</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('thacha-skan')">
+      <div class="film-card" onclick="location.hash='film/thacha-skan'">
         <img src="images/thumbnails/thachaskanthumb.jpg" alt="Thacha Skan">
         <div class="film-card-overlay"><span class="film-card-title">Thacha Skan</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('personal-message')">
+      <div class="film-card" onclick="location.hash='film/personal-message'">
         <img src="images/thumbnails/personalmessagethumb.jpg" alt="Personal Message">
         <div class="film-card-overlay"><span class="film-card-title">Personal Message</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('endless-sleep')">
+      <div class="film-card" onclick="location.hash='film/endless-sleep'">
         <img src="images/thumbnails/endlesssleepthumb.jpg" alt="Endless Sleep">
         <div class="film-card-overlay"><span class="film-card-title">Endless Sleep</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('recital')">
+      <div class="film-card" onclick="location.hash='film/recital'">
         <img src="images/thumbnails/recitalthumb.jpg" alt="Recital">
         <div class="film-card-overlay"><span class="film-card-title">Recital</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('deadline')">
+      <div class="film-card" onclick="location.hash='film/deadline'">
         <img src="images/thumbnails/deadlinethumb.jpg" alt="Deadline">
         <div class="film-card-overlay"><span class="film-card-title">Deadline</span></div>
       </div>
     </div>
 
     <div class="film-grid" id="grid-direct">
-      <div class="film-card" onclick="showFilm('glance')">
+      <div class="film-card" onclick="location.hash='film/glance'">
         <img src="images/thumbnails/glancethumb.jpg" alt="Glance">
         <div class="film-card-overlay"><span class="film-card-title">Glance</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('words')">
+      <div class="film-card" onclick="location.hash='film/words'">
         <img src="images/thumbnails/wordsthumb.jpg" alt="Words">
         <div class="film-card-overlay"><span class="film-card-title">Words</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('distant')">
+      <div class="film-card" onclick="location.hash='film/distant'">
         <img src="images/thumbnails/distantthumb.jpg" alt="Distant">
         <div class="film-card-overlay"><span class="film-card-title">Distant</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('whispers-of-the-sea')">
+      <div class="film-card" onclick="location.hash='film/whispers-of-the-sea'">
         <img src="images/thumbnails/whispersoftheseathumb.jpg" alt="Whispers of the Sea">
         <div class="film-card-overlay"><span class="film-card-title">Whispers of the Sea</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('when-the-earth-turns-blue')">
+      <div class="film-card" onclick="location.hash='film/when-the-earth-turns-blue'">
         <img src="images/thumbnails/whentheearthturnsbluethumb.jpg" alt="When the Earth Turns Blue">
         <div class="film-card-overlay"><span class="film-card-title">When the Earth Turns Blue</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('after-the-pass')">
+      <div class="film-card" onclick="location.hash='film/after-the-pass'">
         <img src="images/thumbnails/afterthepassthumb.jpg" alt="After the Pass">
         <div class="film-card-overlay"><span class="film-card-title">After the Pass</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('endless-sleep')">
+      <div class="film-card" onclick="location.hash='film/endless-sleep'">
         <img src="images/thumbnails/endlesssleepthumb.jpg" alt="Endless Sleep">
         <div class="film-card-overlay"><span class="film-card-title">Endless Sleep</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('deadline')">
+      <div class="film-card" onclick="location.hash='film/deadline'">
         <img src="images/thumbnails/deadlinethumb.jpg" alt="Deadline">
         <div class="film-card-overlay"><span class="film-card-title">Deadline</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('recital')">
+      <div class="film-card" onclick="location.hash='film/recital'">
         <img src="images/thumbnails/recitalthumb.jpg" alt="Recital">
         <div class="film-card-overlay"><span class="film-card-title">Recital</span></div>
       </div>
-      <div class="film-card" onclick="showFilm('in-the-painting')">
+      <div class="film-card" onclick="location.hash='film/in-the-painting'">
         <img src="images/thumbnails/inthepaintingthumb.jpg" alt="In the Painting">
         <div class="film-card-overlay"><span class="film-card-title">In the Painting</span></div>
       </div>
@@ -1040,7 +1039,7 @@
 
   <div class="page" id="page-film">
     <div class="film-page-inner">
-      <button class="film-back" onclick="backToFilms()">← FILMS</button>
+      <button class="film-back" onclick="location.hash='films'">← FILMS</button>
       <div class="film-title-block">
         <div class="film-title-name" id="film-name"></div>
         <div class="film-title-role" id="film-role"></div>
@@ -1157,73 +1156,75 @@
     };
 
     /* ══════════════════════════════
-       PAGE NAVIGATION
+       NEW: HASH ROUTING SYSTEM
     ══════════════════════════════ */
     let filmsScrollPos = 0;
 
-    function showPage(name) {
+    // Listen for URL hash changes (like clicking Back/Forward buttons)
+    window.addEventListener('hashchange', handleHash);
+    window.addEventListener('DOMContentLoaded', handleHash);
+
+    function handleHash() {
+      let hash = window.location.hash.substring(1);
+      if (!hash) {
+        renderPage('home');
+        return;
+      }
+
+      // Automatically close mobile menu upon navigation
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenu) mobileMenu.classList.remove('open');
+
+      // Bonus Fix: Automatically stop the Reel video if user navigates away
+      if (hash !== 'reel') {
+        const overlay = document.getElementById('play-overlay');
+        const wrap = document.getElementById('reel-wrap');
+        if (!overlay && wrap) { 
+           wrap.innerHTML = `<div class="play-overlay" id="play-overlay" onclick="loadReel()"><div class="play-ring"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 1.5L12 7L3 12.5V1.5Z" fill="rgba(236,233,226,0.7)"/></svg></div></div>`;
+        }
+      }
+
+      if (hash.startsWith('film/')) {
+        renderFilm(hash.replace('film/', ''));
+      } else {
+        renderPage(hash);
+      }
+    }
+
+    function renderPage(name) {
       const filmsPage = document.getElementById('page-films');
-      if (filmsPage.classList.contains('active')) {
+      if (filmsPage && filmsPage.classList.contains('active') && name !== 'films') {
         filmsScrollPos = filmsPage.scrollTop;
       }
+      
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      
       const page = document.getElementById('page-' + name);
       if (!page) return;
+      
       page.classList.add('active');
       void page.offsetWidth;
       page.classList.add('fade-in');
+      
       const btn = document.getElementById('nav-' + name);
       if (btn) btn.classList.add('active');
-      page.scrollTop = 0;
+      
+      if (name === 'films') {
+        requestAnimationFrame(() => { page.scrollTop = filmsScrollPos; });
+      } else {
+        page.scrollTop = 0;
+      }
+      
       if (typeof filmsDrop !== 'undefined' && filmsDrop) filmsDrop.classList.remove('open');
     }
 
-    function backToFilms() {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active','fade-in'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      const page = document.getElementById('page-films');
-      page.classList.add('active');
-      void page.offsetWidth;
-      page.classList.add('fade-in');
-      const btn = document.getElementById('nav-films');
-      if (btn) btn.classList.add('active');
-      requestAnimationFrame(() => { page.scrollTop = filmsScrollPos; });
-      if (typeof filmsDrop !== 'undefined' && filmsDrop) filmsDrop.classList.remove('open');
-    }
-
-    /* ══════════════════════════════
-       HAMBURGER MENU (mobile)
-    ══════════════════════════════ */
-    function toggleMenu() {
-      document.getElementById('mobile-menu').classList.toggle('open');
-    }
-
-    function mobileNav(name) {
-      document.getElementById('mobile-menu').classList.remove('open');
-      showPage(name);
-      if (name === 'films') switchTab('cinema');
-    }
-
-    /* ══════════════════════════════
-       INDIVIDUAL FILM (Setup Desktop Only Logic Here)
-    ══════════════════════════════ */
-    let stillIdx = 0;
-    let stillCount = 0;
-
-    const _goToStill = function(idx) {
-      const slides = document.querySelectorAll('#stills-track-inner .still-slide');
-      const dots   = document.querySelectorAll('.stills-dot');
-      slides.forEach(s => s.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-      stillIdx = (idx + slides.length) % slides.length;
-      if(slides[stillIdx]) slides[stillIdx].classList.add('active');
-      if (dots[stillIdx]) dots[stillIdx].classList.add('active');
-    };
-
-    function showFilm(slug) {
+    function renderFilm(slug) {
       const film = FILMS[slug];
-      if (!film) return;
+      if (!film) {
+        window.location.hash = 'films'; // Fallback if film doesn't exist
+        return;
+      }
 
       const filmsPage = document.getElementById('page-films');
       if (filmsPage.classList.contains('active')) {
@@ -1286,6 +1287,29 @@
       document.dispatchEvent(new Event('filmLoaded'));
     }
 
+    /* ══════════════════════════════
+       HAMBURGER MENU (mobile)
+    ══════════════════════════════ */
+    function toggleMenu() {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    }
+
+    /* ══════════════════════════════
+       INDIVIDUAL FILM Desktop Logic
+    ══════════════════════════════ */
+    let stillIdx = 0;
+    let stillCount = 0;
+
+    const _goToStill = function(idx) {
+      const slides = document.querySelectorAll('#stills-track-inner .still-slide');
+      const dots   = document.querySelectorAll('.stills-dot');
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      stillIdx = (idx + slides.length) % slides.length;
+      if(slides[stillIdx]) slides[stillIdx].classList.add('active');
+      if (dots[stillIdx]) dots[stillIdx].classList.add('active');
+    };
+
     function moveStill(dir) {
       if (window.goToStillPatched && window.innerWidth <= 640) {
         window.goToStillPatched(stillIdx + dir);
@@ -1326,7 +1350,7 @@
     }
 
     /* ══════════════════════════════
-       HOME SLIDESHOW (With Dots)
+       HOME SLIDESHOW
     ══════════════════════════════ */
     let slideIdx = 0;
     let slideTimer;
